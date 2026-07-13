@@ -21,7 +21,7 @@ const CONFIG = {
   // a bannerben elfogadás után sem töltődik be semmilyen mérőkód.
   GOOGLE_PIXEL_ID: "", // pl. "G-XXXXXXXXXX" vagy "AW-XXXXXXXXX"
   META_PIXEL_ID: "",   // pl. "1234567890123456"
-  PRIVACY_POLICY_URL: "#", // TODO: cseréld a végleges Adatvédelmi Tájékoztató URL-jére
+  PRIVACY_POLICY_URL: "/adatvedelmi-tajekoztato",
 };
 
 const T = {
