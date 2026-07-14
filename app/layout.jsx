@@ -19,12 +19,22 @@ export const metadata = {
     title: "AI-láthatósági audit | AI SEO Klub",
     description:
       "Ingyenes AI-láthatósági audit: nézd meg, mennyire látja a weboldaladat a ChatGPT, a Claude, a Gemini, a Perplexity és a Google AI keresése.",
+    // JPEG és nem WebP: a LinkedIn a WebP megosztási képet gyakran nem jeleníti meg.
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Ha az AI nem lát téged, a vevőid sem fognak. – AI-láthatósági audit",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "AI-láthatósági audit | AI SEO Klub",
     description:
       "Nézd meg, mennyire látja a weboldaladat a ChatGPT, a Claude, a Gemini és a Perplexity.",
+    images: ["/og-image.jpg"],
   },
   icons: {
     icon: [
