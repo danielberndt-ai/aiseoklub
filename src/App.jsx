@@ -915,7 +915,7 @@ function CookieBanner({ onDecide }) {
       role="dialog"
       aria-live="polite"
       aria-label="Süti-hozzájárulás"
-      className="fade-up"
+      className="fade-in-only"
       style={{
         position: "fixed",
         left: 16,
@@ -1207,6 +1207,11 @@ export default function AiVisibilityAudit() {
         @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&family=Google+Sans+Flex&family=IBM+Plex+Mono:wght@400;600&display=swap');
         @keyframes ringSpin { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(14px);} to { opacity: 1; transform: translateY(0);} }
+        /* A süti-banner külön, transform NÉLKÜLI animációt kap: egy transformot
+           viselő szülő saját backdrop-rootot hozna létre, és a benne lévő
+           backdrop-filter (üveghatás) nem látná az oldal tartalmát. */
+        @keyframes fadeInOnly { from { opacity: 0; } to { opacity: 1; } }
+        .fade-in-only { animation: fadeInOnly 480ms ease both; }
         @keyframes softPulse { 0%,100% { opacity: 1;} 50% { opacity: .4;} }
         .ring-spin { animation: ringSpin 1.1s linear infinite; transform-origin: center; }
         .fade-up { animation: fadeUp 560ms ease both; }
@@ -1221,7 +1226,7 @@ export default function AiVisibilityAudit() {
         .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
         @media (max-width: 760px) { .feature-grid { grid-template-columns: 1fr; } }
         @media (prefers-reduced-motion: reduce) {
-          .ring-spin, .fade-up, .soft-pulse { animation: none; }
+          .ring-spin, .fade-up, .soft-pulse, .fade-in-only { animation: none; }
         }
       `}</style>
 
