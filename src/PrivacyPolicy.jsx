@@ -223,34 +223,57 @@ export default function PrivacyPolicy() {
             3.3. Sütik és mérőkódok (Google Pixel, Meta Pixel)
           </h3>
           <P>
-            Az audit.aiseoklub.hu alkalmazás egy süti-elfogadó sávval indul, ami alapértelmezetten{" "}
-            <strong style={{ color: T.text }}>semmilyen mérőkódot nem tölt be</strong>. A Google Pixelt és a Meta Pixelt kizárólag
-            akkor kapcsolom be, ha a sávon az „Elfogadom" gombra kattintasz. Ha „Elutasítom"-ra kattintasz, vagy nem reagálsz,
-            ezek a mérőkódok nem futnak le.
+            Az audit.aiseoklub.hu alkalmazás egy süti-sávval indul, ami alapértelmezetten{" "}
+            <strong style={{ color: T.text }}>semmilyen mérőkódot nem tölt be</strong>. A hozzájárulást igénylő sütik és mérőkódok
+            kizárólag <strong style={{ color: T.text }}>a döntésed után</strong> települnek: amíg nem választottál, egyetlen
+            mérőkód sem fut le.
+          </P>
+          <P>
+            A hozzájárulást <strong style={{ color: T.text }}>célonként, külön-külön</strong> kérem, három kategóriában:
           </P>
           <ul style={{ margin: "0 0 14px", paddingLeft: 20 }}>
-            <li style={liStyle}><strong style={{ color: T.text }}>Google Pixel</strong> (Google Ireland Limited): a weboldal látogatottságának és a hirdetéseim eredményességének mérésére.</li>
-            <li style={liStyle}><strong style={{ color: T.text }}>Meta Pixel</strong> (Meta Platforms Ireland Limited): a Facebook és Instagram hirdetéseim eredményességének mérésére, valamint remarketing célra.</li>
+            <li style={liStyle}>
+              <strong style={{ color: T.text }}>Feltétlenül szükséges</strong> (mindig aktív, nem kapcsolható): az oldal alapvető
+              működéséhez és a süti-döntésed megjegyzéséhez kell. Nem küld adatot harmadik félnek, és nem igényel hozzájárulást.
+            </li>
+            <li style={liStyle}>
+              <strong style={{ color: T.text }}>Statisztika / analitika</strong> (alapból kikapcsolva): névtelen látogatottsági
+              adatok arról, hogyan használják az oldalt.
+            </li>
+            <li style={liStyle}>
+              <strong style={{ color: T.text }}>Marketing</strong> (alapból kikapcsolva): <strong style={{ color: T.text }}>Google Pixel</strong>{" "}
+              (Google Ireland Limited) és <strong style={{ color: T.text }}>Meta Pixel</strong> (Meta Platforms Ireland Limited) a
+              hirdetéseim eredményességének mérésére és remarketing célra.
+            </li>
           </ul>
+          <P>
+            Egyik opcionális kategória sincs előre bepipálva, és az elutasítás ugyanolyan egyszerű, mint az elfogadás: az
+            „Elfogadom" és az „Elutasítom" gomb azonos súllyal, egymás mellett szerepel. A „Beállítások" alatt kategóriánként is
+            dönthetsz.
+          </P>
           <P>
             Ezek a mérőkódok, ha engedélyezed őket, sütiket (cookie-kat) és egyedi azonosítókat helyeznek el a böngésződben, és
             olyan adatokat gyűjthetnek, mint a látogatott oldalak, a látogatás időpontja, az eszköz és a böngésző típusa, illetve
             az IP-cím.
           </P>
           <P>
-            <strong style={{ color: T.text }}>Jogalap:</strong> a hozzájárulásod, amit a süti-elfogadó sávon az „Elfogadom" gombra kattintva adsz meg.{" "}
+            <strong style={{ color: T.text }}>Jogalap:</strong> a hozzájárulásod, amit a süti-sávon az adott kategória
+            engedélyezésével adsz meg (GDPR 6. cikk (1) bekezdés a) pont).{" "}
             <strong style={{ color: T.text }}>Cél:</strong> weboldal-statisztika, hirdetés-optimalizálás, remarketing.{" "}
-            <strong style={{ color: T.text }}>Megőrzési idő:</strong> az adott süti saját, a szolgáltató által meghatározott megőrzési ideje szerint, ami eltérő lehet a Google és a Meta esetében.
+            <strong style={{ color: T.text }}>Megőrzési idő:</strong> az adott süti saját, a szolgáltató által meghatározott
+            megőrzési ideje szerint, ami eltérő lehet a Google és a Meta esetében.
           </P>
           <P>
-            A döntésedet (elfogadtad-e a sütiket vagy sem) a böngésződ saját tárolójában (localStorage) jegyzem meg, kizárólag a te
-            eszközödön, hogy legközelebb ne kelljen újra megkérdeznem. Ez a technikai tárolás önmagában nem igényel hozzájárulást,
-            mert az oldal alapvető, a döntésed megjegyzéséhez szükséges működését szolgálja, és nem küld adatot harmadik félnek.
+            A döntésedet (kategóriánként, hogy mit engedélyeztél) a böngésződ saját tárolójában (localStorage) jegyzem meg,
+            kizárólag a te eszközödön, hogy legközelebb ne kelljen újra megkérdeznem. Ez a technikai tárolás önmagában nem igényel
+            hozzájárulást, mert az oldal alapvető, a döntésed megjegyzéséhez szükséges működését szolgálja, és nem küld adatot
+            harmadik félnek.
           </P>
           <P>
-            A döntésedet bármikor megváltoztathatod az oldal alján található „Süti beállítások" linkre kattintva, ahol a sáv újra
-            megjelenik. Emellett a Google Pixel és a Meta Pixel használatát a böngésződ beállításaiban, illetve a Google és a Meta
-            saját hirdetési beállításain keresztül is bármikor letilthatod vagy korlátozhatod.
+            A döntésedet bármikor, ugyanolyan egyszerűen megváltoztathatod vagy visszavonhatod az oldal alján található „Süti
+            beállítások" linkre kattintva, ahol a sáv újra megjelenik. Emellett a Google Pixel és a Meta Pixel használatát a
+            böngésződ beállításaiban, illetve a Google és a Meta saját hirdetési beállításain keresztül is bármikor letilthatod
+            vagy korlátozhatod.
           </P>
           <P>
             Az aiseoklub.hu weboldal és a Substack-hírlevél egyéb felületein használt sütikre a Substack saját, mindenkor hatályos
