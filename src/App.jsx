@@ -699,12 +699,12 @@ const AUDIT_FEATURES = [
   {
     icon: IconBot,
     title: "AI crawlerek botonként",
-    desc: "Botonként megmutatja, hogy a GPTBot, a ClaudeBot, a PerplexityBot vagy a Google-Extended engedélyezve van-e. Amit itt blokkolsz, az az AI keresőkben nem létezik.",
+    desc: "Botonként megmutatja, hogy a GPTBot, a ClaudeBot, a PerplexityBot vagy a Google-Extended engedélyezve van-e.",
   },
   {
     icon: IconTag,
     title: "Meta és Open Graph",
-    desc: "A title, a meta description és az Open Graph tagek adják azt a kivonatot, amiből az AI a válaszaiban idéz és hivatkozik rád.",
+    desc: "A title, a meta description és az Open Graph tagek adják azt a kivonatot, amiből az AI rád hivatkozik.",
   },
   {
     icon: IconLayout,
