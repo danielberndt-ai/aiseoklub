@@ -409,7 +409,15 @@ export default function PrivacyPolicy() {
         </div>
       </main>
 
-      <footer style={{ padding: "18px 24px", position: "relative", zIndex: 1, flexShrink: 0 }}>
+      <footer
+        style={{
+          padding: "18px 24px",
+          paddingBottom: "calc(18px + env(safe-area-inset-bottom))",
+          position: "relative",
+          zIndex: 1,
+          flexShrink: 0,
+        }}
+      >
         <div style={{ maxWidth: 760, margin: "0 auto", fontSize: 12, color: T.faint, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
           <span>
             <a href="https://aiseoklub.hu" style={{ color: T.faint, textDecoration: "none" }}>AI SEO Klub</a> ·{" "}

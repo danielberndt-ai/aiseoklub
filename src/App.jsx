@@ -952,7 +952,8 @@ function CookieBanner({ onDecide }) {
         position: "fixed",
         left: 16,
         right: 16,
-        bottom: 16,
+        // A mobil böngésző lebegő eszköztára fölé emeljük (safe area).
+        bottom: "calc(16px + env(safe-area-inset-bottom))",
         zIndex: 50,
         display: "flex",
         justifyContent: "center",
@@ -1569,7 +1570,17 @@ export default function AiVisibilityAudit() {
         )}
       </main>
 
-      <footer style={{ padding: "18px 24px", position: "relative", zIndex: 1, flexShrink: 0 }}>
+      <footer
+        style={{
+          padding: "18px 24px",
+          // viewport-fit=cover mellett a tartalom a képernyő aljáig ér, ezért a
+          // láblécnek ki kell kerülnie a home indicator sávját.
+          paddingBottom: "calc(18px + env(safe-area-inset-bottom))",
+          position: "relative",
+          zIndex: 1,
+          flexShrink: 0,
+        }}
+      >
         <div style={{ maxWidth: 960, margin: "0 auto", fontSize: 12, color: T.faint, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
           <span>
             <a href="https://aiseoklub.hu" style={{ color: T.faint, textDecoration: "none" }}>
