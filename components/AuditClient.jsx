@@ -832,23 +832,28 @@ const AUDIT_FEATURES = [
 function FeatureCards() {
   return (
     <section className="fade-up" style={{ marginTop: 56, animationDelay: "180ms" }}>
-      <div
+      {/* Valódi <h2>: a főcím (h1) alatt ez zárja be a címsor-hierarchiát,
+          a kártyacímek pedig h3-ként épülnek rá. */}
+      <h2
         style={{
           fontFamily: FONT_MONO,
           fontSize: 11,
+          fontWeight: 400,
           letterSpacing: 2,
           color: T.orange,
           textAlign: "center",
-          marginBottom: 22,
+          margin: "0 0 22px",
         }}
       >
         MIT NÉZ ÁT AZ AUDIT
-      </div>
-      <div className="feature-grid">
+      </h2>
+      {/* A kártyák valóban egy felsorolás, ezért <ul>/<li> a helyes jelölés –
+          az AI és a keresők így könnyebben bontják idézhető elemekre. */}
+      <ul className="feature-grid">
         {AUDIT_FEATURES.map((f, i) => {
           const Icon = f.icon;
           return (
-            <div key={i} style={{ ...glassCard, padding: "22px 22px", textAlign: "left" }}>
+            <li key={i} style={{ ...glassCard, padding: "22px 22px", textAlign: "left" }}>
               <div
                 style={{
                   width: 42,
@@ -869,10 +874,10 @@ function FeatureCards() {
                 {f.title}
               </h3>
               <p style={{ fontSize: 13.5, color: T.sub, lineHeight: 1.55, margin: 0 }}>{f.desc}</p>
-            </div>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </section>
   );
 }

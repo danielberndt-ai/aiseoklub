@@ -87,10 +87,14 @@ button:focus-visible { outline: 2px solid #ff8c00; outline-offset: 2px; }
 }
 
 /* ---------- Feature rács ---------- */
+/* A rács <ul>, a kártyák <li> – a lista-jelölést itt nulláznunk kell. */
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 @media (max-width: 760px) {
   .feature-grid { grid-template-columns: 1fr; }
