@@ -1,0 +1,15 @@
+{
+  "name": "AI SEO Klub – AI-láthatósági audit",
+  "description": "Ingyenes eszköz annak mérésére, mennyire látja egy weboldalt a ChatGPT, a Claude, a Gemini, a Perplexity és a Google AI keresése.",
+  "url": "https://audit.aiseoklub.hu/",
+  "language": "hu",
+  "contact": "danielberndt@aiseoklub.hu",
+  "publisher": {
+    "name": "AI SEO Klub",
+    "url": "https://aiseoklub.hu"
+  },
+  "policy": {
+    "allow": ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "PerplexityBot", "Google-Extended", "CCBot"],
+    "disallow": ["/api/"]
+  }
+}

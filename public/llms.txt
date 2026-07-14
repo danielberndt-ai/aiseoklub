@@ -1,0 +1,33 @@
+# AI SEO Klub – AI-láthatósági audit
+
+> Ingyenes eszköz, amivel bárki lemérheti, mennyire látja a weboldalát a ChatGPT,
+> a Claude, a Gemini, a Perplexity és a Google AI keresése. Az audit determinisztikus,
+> valós lekérdezésekkel dolgozik (robots.txt, llms.txt, agents.json, HTML, schema),
+> nincs benne AI-találgatás. Az eredményt pontszámmal és tételes hibalistával adja
+> vissza, a részletes riportot emailben küldi el.
+
+Az eszközt Bernát Dániel (AI SEO Klub) készítette. Magyar nyelvű, magyar
+kis- és középvállalkozásoknak szól.
+
+## Mit vizsgál az audit
+
+- **AI crawler hozzáférés**: a robots.txt alapján botonként (GPTBot, OAI-SearchBot,
+  ChatGPT-User, ClaudeBot, PerplexityBot, Google-Extended, CCBot, Bytespider),
+  valamint az llms.txt és az agents.json megléte.
+- **Indexelhetőség**: noindex tiltás, canonical, sitemap.xml.
+- **Schema markup**: JSON-LD structured data, felismert típusok, dateModified.
+- **Meta és nyelvi beállítások**: title, meta description, lang, Open Graph tagek.
+- **Tartalmi szerkezet**: H1 főcím, címsor-hierarchia, GYIK blokk, listák és táblázatok.
+
+## Oldalak
+
+- [AI-láthatósági audit](https://audit.aiseoklub.hu/): a fő eszköz. Megadod a weboldalad
+  címét és az email címed, és pár másodperc alatt megkapod a pontszámot (0-100) és a
+  kategóriánkénti bontást.
+- [Adatvédelmi Tájékoztató](https://audit.aiseoklub.hu/adatvedelmi-tajekoztato): GDPR és
+  Infotv. szerinti tájékoztató az adatkezelésről.
+
+## Kapcsolat
+
+- Email: danielberndt@aiseoklub.hu
+- AI SEO Klub: https://aiseoklub.hu
