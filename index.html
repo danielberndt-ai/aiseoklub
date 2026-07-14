@@ -28,16 +28,34 @@
          jelenik meg. Görgő (alapértelmezett) háttérrel a böngésző a body
          háttérét a lap szélein túlra is kiterjeszti, így a sávok mögé is
          seamlessen befut. */
-      /* A háttér SZÁNDÉKOSAN lapos, egyenletes #010f0e.
-         Indok (méréssel igazolva): a mobil böngészők (Comet, Safari) áttetsző
-         sötétítő réteget rajzolnak a cím- és eszköztáruk mögé. Ez a réteg a
-         feketén láthatatlan, egy világosabb színátmeneten viszont látható
-         sávot/lépcsőt hoz létre a képernyő tetején és alján.
-         A színt ezért lebegő, lágy fényfoltok adják (.glow-bg), amiket a
-         képernyő pereme közelébe nem engedünk. */
+      /* ASZTALI GÉP: marad az eredeti színátmenet. */
       body {
         background-color: #010f0e;
-        background-image: none;
+        background-image: radial-gradient(
+          ellipse 1200px 700px at 50% -10%,
+          #0d4f4c 0%,
+          #08403d 28%,
+          #042f2e 55%,
+          #021d1c 80%,
+          #010f0e 100%
+        );
+        background-repeat: no-repeat;
+      }
+
+      /* MOBIL: lapos, egyszínű háttér.
+         Indok (teszttel igazolva): a mobil böngésző a cím- és eszköztára mögötti
+         sávot a body BACKGROUND-COLOR-jával festi ki. Ha a tartalom ettől eltérő
+         színű (színátmenet vagy fényfolt), a sáv látható blokként elválik.
+         Egyetlen, egyenletes szín esetén a sáv és a tartalom azonos -> eltűnik.
+         Ezért itt a színátmenetet ÉS a lebegő fényfoltokat is kikapcsoljuk. */
+      @media (max-width: 768px) {
+        body {
+          background-color: #042f2e;
+          background-image: none;
+        }
+        .glow-bg {
+          display: none !important;
+        }
       }
 
       #root { min-height: 100vh; }
