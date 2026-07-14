@@ -255,38 +255,43 @@ function isUnlimited(key) {
   return typeof key === "string" && key.length > 0 && key === secret;
 }
 
-function getClientIp(req) {
-  const fwd = req.headers["x-forwarded-for"];
-  if (typeof fwd === "string" && fwd.length > 0) return fwd.split(",")[0].trim();
-  return req.socket?.remoteAddress || "unknown";
+function getClientIp(request) {
+  const fwd = request.headers.get("x-forwarded-for");
+  if (fwd && fwd.length > 0) return fwd.split(",")[0].trim();
+  return request.headers.get("x-real-ip") || "unknown";
 }
 
 // ---------------------------------------------------------------------
-// Fő handler
+// Fő handler (Next.js Route Handler)
 // ---------------------------------------------------------------------
-export default async function handler(req, res) {
-  const targetUrl = req.query.url;
-  if (!targetUrl || typeof targetUrl !== "string") {
-    res.status(400).json({ error: "missing_url" });
-    return;
+// A cheerio Node API-kat használ, ezért a Node futtatókörnyezet kell.
+// A dynamic beállítás azért fontos, mert a válasz kérésfüggő (IP-limit), tehát
+// nem szabad build időben statikusan legenerálni.
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const targetUrl = searchParams.get("url");
+
+  if (!targetUrl) {
+    return Response.json({ error: "missing_url" }, { status: 400 });
   }
 
   let origin;
   try {
     origin = new URL(targetUrl).origin;
   } catch {
-    res.status(400).json({ error: "invalid_url" });
-    return;
+    return Response.json({ error: "invalid_url" }, { status: 400 });
   }
 
   // Érvényes titkos kulcs esetén a számlálót meg sem érintjük.
-  const unlimited = isUnlimited(req.query.key);
+  const unlimited = isUnlimited(searchParams.get("key"));
   if (!unlimited) {
-    const ip = getClientIp(req);
+    const ip = getClientIp(request);
     const { allowed, remaining } = await checkAndBumpDailyLimit(ip);
     if (!allowed) {
-      res.status(429).json({ error: "daily_limit_reached", remaining });
-      return;
+      return Response.json({ error: "daily_limit_reached", remaining }, { status: 429 });
     }
   }
 
@@ -348,6 +353,8 @@ export default async function handler(req, res) {
     struct: htmlAnalysis.struct,
   };
 
-  res.setHeader("Cache-Control", "no-store");
-  res.status(200).json(result);
+  return Response.json(result, {
+    status: 200,
+    headers: { "Cache-Control": "no-store" },
+  });
 }

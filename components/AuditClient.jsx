@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 
@@ -287,6 +289,8 @@ function applyConsent(consent) {
 const BYPASS_KEY_STORAGE = "aiseoklub_bypass_key";
 
 function readBypassKey() {
+  // Szerveroldali rendereléskor nincs window – ilyenkor üres kulcsot adunk.
+  if (typeof window === "undefined") return "";
   try {
     const params = new URLSearchParams(window.location.search);
     const fromUrl = params.get("key");
@@ -1092,8 +1096,13 @@ export default function AiVisibilityAudit() {
   const [leadInfo, setLeadInfo] = useState(null);
   const [auditsUsed, setAuditsUsed] = useState(0);
   const [showCookieBanner, setShowCookieBanner] = useState(false);
-  const [bypassKey] = useState(readBypassKey);
+  // A kulcsot csak a kliensen olvassuk ki (a szerveren nincs window/localStorage).
+  const [bypassKey, setBypassKey] = useState("");
   const scanningRef = useRef(false);
+
+  useEffect(() => {
+    setBypassKey(readBypassKey());
+  }, []);
 
   useEffect(() => {
     setAuditsUsed(readTodayCount());
@@ -1244,32 +1253,6 @@ export default function AiVisibilityAudit() {
         overflow: "hidden",
       }}
     >
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&family=Google+Sans+Flex&family=IBM+Plex+Mono:wght@400;600&display=swap');
-        @keyframes ringSpin { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(14px);} to { opacity: 1; transform: translateY(0);} }
-        /* A süti-banner külön, transform NÉLKÜLI animációt kap: egy transformot
-           viselő szülő saját backdrop-rootot hozna létre, és a benne lévő
-           backdrop-filter (üveghatás) nem látná az oldal tartalmát. */
-        @keyframes fadeInOnly { from { opacity: 0; } to { opacity: 1; } }
-        .fade-in-only { animation: fadeInOnly 480ms ease both; }
-        @keyframes softPulse { 0%,100% { opacity: 1;} 50% { opacity: .4;} }
-        .ring-spin { animation: ringSpin 1.1s linear infinite; transform-origin: center; }
-        .fade-up { animation: fadeUp 560ms ease both; }
-        .soft-pulse { animation: softPulse 1.4s ease-in-out infinite; }
-        .cta { transition: filter 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
-        .cta:hover { filter: brightness(1.08); transform: translateY(-1px); }
-        .ghost { transition: background 180ms ease; }
-        .ghost:hover { background: rgba(255,255,255,0.06); }
-        input::placeholder { color: rgba(246,246,245,0.28); }
-        input:focus, button:focus-visible { outline: 2px solid #FF8C00; outline-offset: 2px; }
-        .glow-bg { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
-        .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        @media (max-width: 760px) { .feature-grid { grid-template-columns: 1fr; } }
-        @media (prefers-reduced-motion: reduce) {
-          .ring-spin, .fade-up, .soft-pulse, .fade-in-only { animation: none; }
-        }
-      `}</style>
 
       {/* Minimál, statikus háttérfény, semmi rács vagy minta */}
       <div className="glow-bg" style={{ width: 620, height: 620, top: -260, right: -160, background: "rgba(255,140,0,0.09)" }} />

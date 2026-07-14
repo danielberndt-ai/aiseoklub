@@ -292,17 +292,21 @@ async function saveToSheet({ email, url, score, categories }) {
 // ---------------------------------------------------------------------
 // Fő handler
 // ---------------------------------------------------------------------
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    res.status(405).json({ error: "method_not_allowed" });
-    return;
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+export async function POST(request) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return Response.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const { email, url, score, categories, details } = req.body || {};
+  const { email, url, score, categories, details } = body || {};
 
   if (!email || typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-    res.status(400).json({ error: "invalid_email" });
-    return;
+    return Response.json({ error: "invalid_email" }, { status: 400 });
   }
 
   // A két lépés egymástól függetlenül fut: ha az email küldése elhasal, a
@@ -314,7 +318,7 @@ export default async function handler(req, res) {
 
   // A "simulated" jelzést a felület használja: akkor igaz, ha az email
   // küldése nincs beállítva, tehát valójában nem ment ki riport.
-  res.status(200).json({
+  return Response.json({
     ok: mail.sent || sheet.saved,
     simulated: !mail.sent,
     emailSent: mail.sent,

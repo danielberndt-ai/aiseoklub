@@ -97,15 +97,6 @@ export default function PrivacyPolicy() {
         overflow: "hidden",
       }}
     >
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&family=Google+Sans+Flex&family=IBM+Plex+Mono:wght@400;600&display=swap');
-        .glow-bg { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
-        a:hover { filter: brightness(1.1); }
-        .pp-table { width: 100%; border-collapse: collapse; margin: 6px 0 14px; }
-        .pp-table th, .pp-table td { text-align: left; padding: 11px 13px; border: 1px solid ${T.line}; font-size: 13.5px; line-height: 1.5; vertical-align: top; }
-        .pp-table th { font-family: ${FONT_MONO}; font-size: 11px; letter-spacing: 1px; color: ${T.orange}; background: rgba(255,140,0,0.06); }
-        .pp-table td { color: ${T.sub}; }
-      `}</style>
 
       <div className="glow-bg" style={{ width: 620, height: 620, top: -260, right: -160, background: "rgba(255,140,0,0.09)" }} />
       <div className="glow-bg" style={{ width: 560, height: 560, bottom: -300, left: -200, background: "rgba(20,184,166,0.10)" }} />
