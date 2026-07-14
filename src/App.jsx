@@ -1291,7 +1291,10 @@ export default function AiVisibilityAudit() {
             <a href="https://aiseoklub.hu" style={{ color: T.faint, textDecoration: "none" }}>
               AI SEO Klub
             </a>{" "}
-            · Daniel Berndt
+            ·{" "}
+            <a href="https://danielberndt.com/" target="_blank" rel="noopener noreferrer" style={{ color: T.faint, textDecoration: "none" }}>
+              Daniel Berndt
+            </a>
           </span>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <button
