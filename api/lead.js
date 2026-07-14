@@ -26,11 +26,29 @@ function escapeHtml(s) {
     .replace(/"/g, "&quot;");
 }
 
+// Világos háttéren is jól olvasható, kontrasztos árnyalatok.
 function scoreColor(s) {
-  if (s === null || s === undefined) return "#8B8B93";
-  if (s >= 80) return "#46D19E";
-  if (s >= 50) return "#FF8C00";
-  return "#FF6B6B";
+  if (s === null || s === undefined) return "#6B7280";
+  if (s >= 80) return "#0F9D6E";
+  if (s >= 50) return "#E07B00";
+  return "#DC2626";
+}
+
+// Budapesti idő, ember által olvasható és a Sheet által is értelmezhető
+// formában: "2026-07-14 12:50:49".
+function budapestTimestamp() {
+  const parts = new Intl.DateTimeFormat("hu-HU", {
+    timeZone: "Europe/Budapest",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).formatToParts(new Date());
+  const p = Object.fromEntries(parts.map((x) => [x.type, x.value]));
+  return `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.second}`;
 }
 
 function scoreWord(s) {
@@ -64,13 +82,13 @@ function buildEmailHtml({ url, score, details }) {
           <td style="padding:14px 0 6px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
               <tr>
-                <td style="font:600 15px/1.4 Arial,Helvetica,sans-serif;color:#F6F6F5;">${escapeHtml(c.name)}</td>
+                <td style="font:600 15px/1.4 Arial,Helvetica,sans-serif;color:#1B2320;">${escapeHtml(c.name)}</td>
                 <td align="right" style="font:700 15px/1.4 Arial,Helvetica,sans-serif;color:${col};">
                   ${typeof s === "number" ? s + "/100" : "n/a"}
                 </td>
               </tr>
             </table>
-            <div style="height:8px;background:#1c2b2a;border-radius:99px;margin-top:8px;">
+            <div style="height:8px;background:#E9ECEF;border-radius:99px;margin-top:8px;">
               <div style="height:8px;width:${width}%;background:${col};border-radius:99px;font-size:0;line-height:0;">&nbsp;</div>
             </div>
           </td>
@@ -90,7 +108,7 @@ function buildEmailHtml({ url, score, details }) {
     ? `
       <tr>
         <td style="padding:26px 0 0;">
-          <div style="font:700 16px/1.4 Arial,Helvetica,sans-serif;color:#F6F6F5;margin-bottom:10px;">
+          <div style="font:700 16px/1.4 Arial,Helvetica,sans-serif;color:#1B2320;margin-bottom:10px;">
             Amin javítani érdemes (${problems.length} tétel)
           </div>
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
@@ -98,8 +116,8 @@ function buildEmailHtml({ url, score, details }) {
               .map(
                 (p) => `
               <tr>
-                <td style="padding:7px 0;border-bottom:1px solid #1c2b2a;font:400 14px/1.5 Arial,Helvetica,sans-serif;color:#b9c2c1;">
-                  <span style="color:#FF6B6B;font-weight:700;">✕</span>&nbsp; ${escapeHtml(p)}
+                <td style="padding:7px 0;border-bottom:1px solid #E9ECEF;font:400 14px/1.5 Arial,Helvetica,sans-serif;color:#4B5563;">
+                  <span style="color:#DC2626;font-weight:700;">✕</span>&nbsp; ${escapeHtml(p)}
                 </td>
               </tr>`
               )
@@ -109,7 +127,7 @@ function buildEmailHtml({ url, score, details }) {
       </tr>`
     : `
       <tr>
-        <td style="padding:26px 0 0;font:400 14px/1.6 Arial,Helvetica,sans-serif;color:#46D19E;">
+        <td style="padding:26px 0 0;font:400 14px/1.6 Arial,Helvetica,sans-serif;color:#0F9D6E;">
           Nem találtunk hiányzó tételt – ez erős eredmény.
         </td>
       </tr>`;
@@ -118,31 +136,31 @@ function buildEmailHtml({ url, score, details }) {
 
   return `<!doctype html>
 <html lang="hu">
-<body style="margin:0;padding:0;background:#010f0e;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#010f0e;padding:28px 12px;">
+<body style="margin:0;padding:0;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px;">
     <tr>
       <td align="center">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#042f2e;border-radius:18px;padding:32px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">
           <tr>
             <td style="font:900 17px/1 Arial,Helvetica,sans-serif;padding-bottom:22px;">
-              <span style="color:#FF8C00;">AI SEO</span> <span style="color:#F6F6F5;">KLUB</span>
-              <span style="color:#FF8C00;font:400 11px/1 Arial,Helvetica,sans-serif;letter-spacing:2px;">&nbsp;&nbsp;AI-LÁTHATÓSÁGI AUDIT</span>
+              <span style="color:#FF8C00;">AI SEO</span> <span style="color:#1B2320;">KLUB</span>
+              <span style="color:#E07B00;font:400 11px/1 Arial,Helvetica,sans-serif;letter-spacing:2px;">&nbsp;&nbsp;AI-LÁTHATÓSÁGI AUDIT</span>
             </td>
           </tr>
           <tr>
-            <td style="font:400 13px/1.5 Arial,Helvetica,sans-serif;color:#8fa09e;padding-bottom:4px;">
+            <td style="font:400 13px/1.5 Arial,Helvetica,sans-serif;color:#6B7280;padding-bottom:4px;">
               Ellenőrzött oldal
             </td>
           </tr>
           <tr>
-            <td style="font:400 14px/1.5 Arial,Helvetica,sans-serif;color:#FF8C00;padding-bottom:22px;word-break:break-all;">
+            <td style="font:400 14px/1.5 Arial,Helvetica,sans-serif;color:#E07B00;padding-bottom:22px;word-break:break-all;">
               ${escapeHtml(url || "")}
             </td>
           </tr>
           <tr>
             <td align="center" style="padding:10px 0 6px;">
               <div style="font:900 52px/1 Arial,Helvetica,sans-serif;color:${col};">
-                ${typeof score === "number" ? score : "–"}<span style="font-size:22px;color:#5c6b6a;">/100</span>
+                ${typeof score === "number" ? score : "–"}<span style="font-size:22px;color:#9CA3AF;">/100</span>
               </div>
               <div style="font:600 14px/1.4 Arial,Helvetica,sans-serif;color:${col};padding-top:6px;">
                 ${scoreWord(score)}
@@ -150,7 +168,7 @@ function buildEmailHtml({ url, score, details }) {
             </td>
           </tr>
           <tr>
-            <td align="center" style="font:700 18px/1.35 Arial,Helvetica,sans-serif;color:#F6F6F5;padding:14px 0 8px;">
+            <td align="center" style="font:700 18px/1.35 Arial,Helvetica,sans-serif;color:#1B2320;padding:14px 0 8px;">
               ${escapeHtml(headline(score))}
             </td>
           </tr>
@@ -162,15 +180,34 @@ function buildEmailHtml({ url, score, details }) {
             </td>
           </tr>
           ${problemsHtml}
+
+          <!-- CTA -->
           <tr>
-            <td style="padding:30px 0 0;font:400 12px/1.6 Arial,Helvetica,sans-serif;color:#5c6b6a;border-top:1px solid #1c2b2a;margin-top:20px;">
-              Az eredmények tájékoztató jellegűek; az AI keresők működése és a szabványok folyamatosan változnak.
-              Az elemzés a nyilvánosan elérhető jelekből dolgozik.
+            <td style="padding:32px 0 0;">
+              <div style="font:700 17px/1.5 Arial,Helvetica,sans-serif;color:#1B2320;">
+                Ha azt akarod, hogy az AI-ok jobban lássanak, akkor csatlakozz az
+                <a href="https://aiseoklub.hu/" style="color:#FF8C00;text-decoration:none;font-weight:700;">AI SEO Klubhoz</a>.
+              </div>
             </td>
           </tr>
           <tr>
-            <td style="padding-top:16px;font:400 12px/1.6 Arial,Helvetica,sans-serif;color:#5c6b6a;">
-              AI SEO Klub · <a href="https://danielberndt.com/" style="color:#5c6b6a;">Daniel Berndt</a>
+            <td style="padding:12px 0 0;font:400 14px/1.6 Arial,Helvetica,sans-serif;color:#4B5563;">
+              Ha nincs időd foglalkozni ezzel, írj egy emailt nekem és beszéljünk a dologról.
+              <a href="mailto:danielberndt@aiseoklub.hu" style="color:#E07B00;text-decoration:none;">danielberndt@aiseoklub.hu</a>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:30px 0 0;">
+              <div style="border-top:1px solid #E9ECEF;padding-top:16px;font:400 12px/1.6 Arial,Helvetica,sans-serif;color:#9CA3AF;">
+                Az eredmények tájékoztató jellegűek; az AI keresők működése és a szabványok folyamatosan változnak.
+                Az elemzés a nyilvánosan elérhető jelekből dolgozik.
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding-top:14px;font:400 12px/1.6 Arial,Helvetica,sans-serif;color:#9CA3AF;">
+              AI SEO Klub · <a href="https://danielberndt.com/" style="color:#9CA3AF;">Daniel Berndt</a>
             </td>
           </tr>
         </table>
@@ -230,7 +267,7 @@ async function saveToSheet({ email, url, score, categories }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         secret,
-        timestamp: new Date().toISOString(),
+        timestamp: budapestTimestamp(),
         email,
         url: url || "",
         score: typeof score === "number" ? score : "",
