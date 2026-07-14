@@ -7,6 +7,7 @@ export const metadata = {
   title: "AI-láthatósági audit | AI SEO Klub",
   description:
     "Ingyenes AI-láthatósági audit: nézd meg, mennyire látja a weboldaladat a ChatGPT, a Claude, a Gemini, a Perplexity és a Google AI keresése.",
+  keywords: ["ai seo", "ai láthatóság"],
   alternates: {
     canonical: "/",
   },
