@@ -355,12 +355,6 @@ export default function PrivacyPolicy() {
             környezet. A mindenkor aktuális verzió ezen az oldalon érhető el.
           </P>
 
-          <div style={{ height: 1, background: T.line, margin: "28px 0 18px" }} />
-          <P style={{ fontSize: 13, color: T.faint, fontStyle: "italic", marginBottom: 0 }}>
-            Ez a tájékoztató a GDPR és az Infotv. szokásos szerkezete alapján készült, de nem minősül jogi tanácsadásnak. Élesítés
-            előtt érdemes adatvédelemben jártas jogásszal átnézetni, különös tekintettel a Google Pixel és a Meta Pixel pontos
-            beállítására és a hozzájuk tartozó cookie-bannerre.
-          </P>
         </div>
       </main>
 
