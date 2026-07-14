@@ -2,10 +2,7 @@
 <html lang="hu">
   <head>
     <meta charset="UTF-8" />
-    <!-- viewport-fit=cover: az oldal a képernyő széléig ér (a "safe area"-kba is),
-         így a Safari lebegő eszköztára átlátszóan a tartalom fölé kerül, nem
-         kap külön tömör hátteret. -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -24,6 +21,13 @@
          viewport-fit=cover miatt a tartalom a képernyő széléig ér. Így a háttér
          befut a mobil böngésző cím- és eszköztára mögé is – nincs külön
          kifestett blokk. (Ugyanez a megoldás pl. a rackhost.hu-nál is.) */
+      /* FONTOS: NINCS background-attachment: fixed!
+         Az iOS WebKit (Safari, Comet) a "fixed" hátteret nem terjeszti ki a
+         canvas-ra, vagyis a böngésző cím- és eszköztára mögötti területre –
+         ott a tömör background-color-t festené, ami látható sötét blokként
+         jelenik meg. Görgő (alapértelmezett) háttérrel a böngésző a body
+         háttérét a lap szélein túlra is kiterjeszti, így a sávok mögé is
+         seamlessen befut. */
       body {
         background-color: #010f0e;
         background-image: radial-gradient(
@@ -35,8 +39,6 @@
           #010f0e 100%
         );
         background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: cover;
       }
 
       #root { min-height: 100vh; }
