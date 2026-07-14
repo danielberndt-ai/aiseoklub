@@ -44,6 +44,12 @@ async function fetchWithTimeout(url, options = {}) {
       ...options,
       signal: controller.signal,
       redirect: "follow",
+      // KRITIKUS: a Next.js alapértelmezésben CACHE-ELI a fetch hívásokat a
+      // Route Handlerekben. Enélkül a szkenner a korábbi kérésből eltárolt,
+      // elavult HTML-t elemezné – vagyis aki megjavítja az oldalát és újra
+      // auditál, a régi eredményt kapná vissza. Az auditnak mindig friss
+      // lekérdezést kell csinálnia.
+      cache: "no-store",
       headers: {
         "User-Agent": "AISEOKlubAuditBot/1.0 (+https://aiseoklub.hu)",
         ...(options.headers || {}),
