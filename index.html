@@ -19,7 +19,27 @@
     <style>
       * { box-sizing: border-box; }
       html, body { margin: 0; padding: 0; }
-      body { background: #010f0e; }
+
+      /* A háttér-színátmenet SZÁNDÉKOSAN a <body>-n van, nem egy belső div-en.
+         A böngésző a safe area-kat (a státuszsáv és az eszköztár mögötti sávot)
+         a body hátterével festi ki – ha itt csak tömör szín lenne, ott látható
+         sáv keletkezne, miközben a tartalom színátmenettel indul.
+         Így a háttér seamlessen befut a böngésző sávjai mögé. */
+      body {
+        background-color: #010f0e;
+        background-image: radial-gradient(
+          ellipse 1200px 700px at 50% -10%,
+          #0d4f4c 0%,
+          #08403d 28%,
+          #042f2e 55%,
+          #021d1c 80%,
+          #010f0e 100%
+        );
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+      }
+
       #root { min-height: 100vh; }
     </style>
   </head>

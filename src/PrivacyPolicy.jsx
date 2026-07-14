@@ -89,8 +89,8 @@ export default function PrivacyPolicy() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        background:
-          "radial-gradient(ellipse 1200px 700px at 50% -10%, #0d4f4c 0%, #08403d 28%, #042f2e 55%, #021d1c 80%, #010f0e 100%)",
+        // A háttér-színátmenet a <body>-n van (lásd index.html).
+        background: "transparent",
         fontFamily: FONT_BODY,
         color: T.text,
         position: "relative",
