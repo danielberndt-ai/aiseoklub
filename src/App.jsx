@@ -739,18 +739,18 @@ const AUDIT_FEATURES = [
   },
   {
     icon: IconBook,
-    title: "llms.txt — az AI-k robots.txt-je",
-    desc: "Egy egyszerű fájl, amivel közvetlenül az AI-modelleknek mondod meg, mit olvashatnak nálad. Ma még alig használja valaki.",
+    title: "llms.txt",
+    desc: "Egy egyszerű fájl, amivel közvetlenül az AI-oknak mondod meg, mit olvashatnak nálad. Alig használja valaki.",
   },
   {
     icon: IconShield,
     title: "Nincs AI-találgatás",
-    desc: "Minden ellenőrzés valódi lekérdezés: robots.txt, HTML, schema. Ugyanaz az oldal mindig ugyanazt a pontszámot kapja.",
+    desc: "Minden ellenőrzés valódi lekérdezés: robots.txt, HTML, schema. Valós lekérdezések valós eredmények.",
   },
   {
     icon: IconMail,
     title: "Riport emailben, tételesen",
-    desc: "A pontszám mellé kapsz egy konkrét listát arról, mi hiányzik — hogy tudd, hol érdemes kezdeni.",
+    desc: "A pontszám mellé kapsz egy konkrét listát arról, mi hiányzik, hogy tudd, hol érdemes kezdeni.",
   },
 ];
 
