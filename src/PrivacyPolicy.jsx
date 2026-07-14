@@ -369,7 +369,6 @@ export default function PrivacyPolicy() {
           <span>
             <a href="https://aiseoklub.hu" style={{ color: T.faint, textDecoration: "none" }}>AI SEO Klub</a> · Daniel Berndt
           </span>
-          <a href="/" style={{ color: T.faint, textDecoration: "none", fontFamily: FONT_MONO }}>audit.aiseoklub.hu</a>
         </div>
       </footer>
     </div>
