@@ -14,6 +14,9 @@ const jsonLd = {
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       inLanguage: "hu",
+      // Frissesség jelzése: az AI keresők előnyben részesítik az aktuális
+      // tartalmat. Érdemes frissíteni, amikor érdemben változik az oldal.
+      dateModified: "2026-07-14",
       description:
         "Ingyenes eszköz, amivel lemérheted, mennyire látja a weboldaladat a ChatGPT, a Claude, a Gemini, a Perplexity és a Google AI keresése.",
       offers: {
