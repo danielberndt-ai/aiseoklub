@@ -928,6 +928,10 @@ function CookieBanner({ onDecide }) {
         zIndex: 50,
         display: "flex",
         justifyContent: "center",
+        // A portál miatt a banner a <body> alatt van, nem a fő konténerben,
+        // ezért a betűtípust itt külön meg kell adni – különben a böngésző
+        // alapértelmezett (serif) betűjét örökölné.
+        fontFamily: FONT_BODY,
       }}
     >
       <div
