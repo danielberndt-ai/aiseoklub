@@ -1304,7 +1304,7 @@ export default function AiVisibilityAudit() {
                 fontSize: 12,
                 fontFamily: FONT_BODY,
                 cursor: "pointer",
-                textDecoration: "underline",
+                textDecoration: "none",
               }}
             >
               Süti beállítások
