@@ -1312,11 +1312,6 @@ export default function AiVisibilityAudit() {
             <a href={CONFIG.PRIVACY_POLICY_URL} style={{ color: T.faint, textDecoration: "none" }}>
               Adatvédelmi Tájékoztató
             </a>
-            <span style={{ fontFamily: FONT_MONO }}>
-              <a href="https://audit.aiseoklub.hu" style={{ color: T.faint, textDecoration: "none", fontFamily: FONT_MONO }}>
-                audit.aiseoklub.hu
-              </a>
-            </span>
           </div>
         </div>
       </footer>
