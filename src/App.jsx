@@ -680,6 +680,32 @@ function IconLayout() {
   );
 }
 
+function IconBook() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
+      <path d="M9 7h7M9 11h5" />
+    </svg>
+  );
+}
+function IconShield() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+      <path d="m9 12 2 2 4-4" />
+    </svg>
+  );
+}
+function IconMail() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <path d="m2 7 10 6 10-6" />
+    </svg>
+  );
+}
+
 const AUDIT_FEATURES = [
   {
     icon: IconFiles,
@@ -710,6 +736,21 @@ const AUDIT_FEATURES = [
     icon: IconLayout,
     title: "Tartalmi szerkezet",
     desc: "H1 főcím, tiszta címsor-hierarchia, listák és táblázatok. A jól tagolt tartalmat az AI könnyebben bontja idézhető részekre.",
+  },
+  {
+    icon: IconBook,
+    title: "llms.txt — az AI-k robots.txt-je",
+    desc: "Egy egyszerű fájl, amivel közvetlenül az AI-modelleknek mondod meg, mit olvashatnak nálad. Ma még alig használja valaki.",
+  },
+  {
+    icon: IconShield,
+    title: "Nincs AI-találgatás",
+    desc: "Minden ellenőrzés valódi lekérdezés: robots.txt, HTML, schema. Ugyanaz az oldal mindig ugyanazt a pontszámot kapja.",
+  },
+  {
+    icon: IconMail,
+    title: "Riport emailben, tételesen",
+    desc: "A pontszám mellé kapsz egy konkrét listát arról, mi hiányzik — hogy tudd, hol érdemes kezdeni.",
   },
 ];
 
