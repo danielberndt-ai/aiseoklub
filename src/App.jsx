@@ -883,14 +883,16 @@ function FeatureCards() {
 const consentBtnBase = {
   border: "none",
   borderRadius: 11,
-  padding: "11px 18px",
+  padding: "11px 10px",
   fontFamily: FONT_DISPLAY,
   fontWeight: FONT_DISPLAY_WEIGHT,
   fontSize: 13.5,
   cursor: "pointer",
   whiteSpace: "nowrap",
   color: "#FFFFFF",
-  minWidth: 128,
+  // Rugalmas szélesség, hogy a három gomb keskeny mobilon is EGY sorba férjen.
+  flex: "1 1 0",
+  minWidth: 0,
 };
 
 function CategoryRow({ title, desc, checked, onChange, locked }) {
@@ -1012,9 +1014,9 @@ function CookieBanner({ onDecide }) {
         <div
           style={{
             display: "flex",
-            gap: 10,
-            flexWrap: "wrap",
-            alignItems: "center",
+            gap: 8,
+            flexWrap: "nowrap",
+            alignItems: "stretch",
             marginTop: 16,
           }}
         >
@@ -1044,7 +1046,7 @@ function CookieBanner({ onDecide }) {
                 border: "1px solid rgba(4,47,46,0.35)",
               }}
             >
-              Kiválasztottak mentése
+              Mentés
             </button>
           ) : (
             <button
