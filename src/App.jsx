@@ -1212,7 +1212,7 @@ export default function AiVisibilityAudit() {
                     disabled={remaining <= 0}
                     style={{
                       background: remaining <= 0 ? "rgba(255,140,0,0.35)" : T.orange,
-                      color: "#FFFFFF",
+                      color: remaining <= 0 ? "rgba(255,255,255,0.45)" : "#FFFFFF",
                       border: "none",
                       borderRadius: 13,
                       padding: "15px 20px",
