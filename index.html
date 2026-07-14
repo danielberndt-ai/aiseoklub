@@ -28,18 +28,15 @@
          jelenik meg. Görgő (alapértelmezett) háttérrel a böngésző a body
          háttérét a lap szélein túlra is kiterjeszti, így a sávok mögé is
          seamlessen befut. */
+      /* ===== IDEIGLENES TESZT =====
+         Teljesen lapos, egyenletes háttér (mint a queryfan.com-nál), hogy
+         kiderüljön: a mobil böngésző sötétítő rétege a színátmenettel ütközik-e.
+         Ha a sávok eltűnnek, visszahozzuk a ragyogást fokozatosan. */
       body {
         background-color: #010f0e;
-        background-image: radial-gradient(
-          ellipse 1200px 700px at 50% -10%,
-          #0d4f4c 0%,
-          #08403d 28%,
-          #042f2e 55%,
-          #021d1c 80%,
-          #010f0e 100%
-        );
-        background-repeat: no-repeat;
+        background-image: none;
       }
+      .glow-bg { display: none !important; }
 
       #root { min-height: 100vh; }
     </style>
