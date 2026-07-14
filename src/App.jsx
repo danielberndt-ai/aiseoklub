@@ -928,10 +928,14 @@ function CookieBanner({ onDecide }) {
     >
       <div
         style={{
-          background: "#F4F1EA",
-          border: "1px solid rgba(4,47,46,0.12)",
+          // "Liquid glass": áttetsző alap + erős háttér-elmosás, hogy az alatta
+          // lévő tartalom átderengjen, de a szöveg olvasható maradjon.
+          background: "rgba(244,241,234,0.62)",
+          backdropFilter: "blur(22px) saturate(180%)",
+          WebkitBackdropFilter: "blur(22px) saturate(180%)",
+          border: "1px solid rgba(255,255,255,0.45)",
           borderRadius: 20,
-          boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
+          boxShadow: "0 20px 50px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)",
           maxWidth: 720,
           width: "100%",
           padding: "20px 22px",
