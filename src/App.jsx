@@ -81,12 +81,12 @@ const SCAN_STEPS = [
 // Lead beküldés – a saját Vercel API route-ot hívja (api/lead.js),
 // ami a szerveren, saját MailerLite API kulccsal küldi tovább az adatot.
 // ------------------------------------------------------------------
-async function submitLead({ email, url, score, categories }) {
+async function submitLead({ email, url, score, categories, details }) {
   try {
     const res = await fetch("/api/lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, url, score, categories }),
+      body: JSON.stringify({ email, url, score, categories, details }),
     });
     if (!res.ok) throw new Error("lead-failed");
     return await res.json();
@@ -908,11 +908,20 @@ export default function AiVisibilityAudit() {
       const cats = buildCategories(data);
       const scoreForLead = overallScore(cats);
       const catSummary = Object.fromEntries(cats.map((c) => [c.key, scoreCategory(c)]));
+      // A részletes bontást is átadjuk, hogy a riport-email konkrét, tételes
+      // listát tudjon tartalmazni arról, mi rendben és mi hiányzik.
+      const details = cats.map((c) => ({
+        key: c.key,
+        name: c.name,
+        score: scoreCategory(c),
+        findings: c.findings.map((f) => ({ label: f.label, ok: f.ok })),
+      }));
       const lead = await submitLead({
         email: email.trim(),
         url: normalized,
         score: scoreForLead,
         categories: catSummary,
+        details,
       });
       setLeadInfo(lead);
     } catch (e) {
