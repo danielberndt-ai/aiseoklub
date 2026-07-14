@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
+import { createPortal } from "react-dom";
 
 // =====================================================================
 // AI SEO KLUB – AI-láthatósági audit
@@ -910,12 +911,15 @@ function CookieBanner({ onDecide }) {
   const [analytics, setAnalytics] = useState(true);
   const [marketing, setMarketing] = useState(true);
 
-  return (
+  // A bannert PORTÁLLAL közvetlenül a <body> alá rendereljük. Ha a fő
+  // app-konténer gyereke maradna (ami overflow:hidden + position:relative),
+  // a Chromium nem az oldal tartalmát venné a backdrop-filter alapjául,
+  // és az üveghatás (elmosás) nem jelenne meg.
+  return createPortal(
     <div
       role="dialog"
       aria-live="polite"
       aria-label="Süti-hozzájárulás"
-      className="fade-in-only"
       style={{
         position: "fixed",
         left: 16,
@@ -1036,7 +1040,8 @@ function CookieBanner({ onDecide }) {
           </a>
         </p>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
