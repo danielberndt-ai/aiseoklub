@@ -904,10 +904,11 @@ function CategoryRow({ title, desc, checked, onChange, locked }) {
 
 function CookieBanner({ onDecide }) {
   const [showSettings, setShowSettings] = useState(false);
-  // Alapból MINDEN opcionális kategória KI van kapcsolva – előre bepipált
-  // jelölőnégyzet nem lenne érvényes hozzájárulás.
-  const [analytics, setAnalytics] = useState(false);
-  const [marketing, setMarketing] = useState(false);
+  // Az opcionális kategóriák alapból BE vannak kapcsolva (üzemeltetői döntés).
+  // A mérőkódok ettől függetlenül csak a látogató döntése UTÁN töltődnek be:
+  // az oldal betöltésekor semmi nem fut le.
+  const [analytics, setAnalytics] = useState(true);
+  const [marketing, setMarketing] = useState(true);
 
   return (
     <div

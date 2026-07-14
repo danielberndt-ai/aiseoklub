@@ -242,19 +242,20 @@ export default function PrivacyPolicy() {
               működéséhez és a süti-döntésed megjegyzéséhez kell. Nem küld adatot harmadik félnek, és nem igényel hozzájárulást.
             </li>
             <li style={liStyle}>
-              <strong style={{ color: T.text }}>Statisztika / analitika</strong> (alapból kikapcsolva): névtelen látogatottsági
-              adatok arról, hogyan használják az oldalt.
+              <strong style={{ color: T.text }}>Statisztika / analitika</strong>: névtelen látogatottsági adatok arról, hogyan
+              használják az oldalt.
             </li>
             <li style={liStyle}>
-              <strong style={{ color: T.text }}>Marketing</strong> (alapból kikapcsolva): <strong style={{ color: T.text }}>Google Pixel</strong>{" "}
+              <strong style={{ color: T.text }}>Marketing</strong>: <strong style={{ color: T.text }}>Google Pixel</strong>{" "}
               (Google Ireland Limited) és <strong style={{ color: T.text }}>Meta Pixel</strong> (Meta Platforms Ireland Limited) a
               hirdetéseim eredményességének mérésére és remarketing célra.
             </li>
           </ul>
           <P>
-            Egyik opcionális kategória sincs előre bepipálva, és az elutasítás ugyanolyan egyszerű, mint az elfogadás: az
-            „Elfogadom" és az „Elutasítom" gomb azonos súllyal, egymás mellett szerepel. A „Beállítások" alatt kategóriánként is
-            dönthetsz.
+            A „Beállítások" alatt kategóriánként is dönthetsz: a két opcionális kategória kapcsolója alapértelmezetten
+            bekapcsolt állapotban jelenik meg, de bármelyiket kikapcsolhatod a mentés előtt. Az elutasítás ugyanolyan egyszerű,
+            mint az elfogadás: az „Elfogadom" és az „Elutasítom" gomb azonos súllyal, egymás mellett szerepel. Semmilyen mérőkód
+            nem töltődik be addig, amíg nem választottál.
           </P>
           <P>
             Ezek a mérőkódok, ha engedélyezed őket, sütiket (cookie-kat) és egyedi azonosítókat helyeznek el a böngésződben, és
