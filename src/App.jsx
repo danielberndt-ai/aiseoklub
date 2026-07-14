@@ -277,11 +277,35 @@ function applyConsent(consent) {
 // robots.txt, llms.txt, agents.json, schema, meta és szerkezet-ellenőrzés,
 // determinisztikusan, AI nélkül. A daily limit is itt, szerveroldalon dől el.
 // ------------------------------------------------------------------
-async function runRemoteScan(targetUrl, email) {
-  // Az email azért megy át, mert a szerveren lehetnek korlátlan hozzáférésű
-  // címek (BYPASS_EMAILS), amikre a napi limit nem vonatkozik.
+// ------------------------------------------------------------------
+// Korlátlan hozzáférés titkos kulccsal.
+// Használat: egyszer nyisd meg az oldalt így -> /?key=A_TITKOS_KULCS
+// A kulcs ekkor a böngésződbe mentődik, a címsorból pedig azonnal eltűnik,
+// hogy egy képernyőképpel vagy megosztott linkkel se szivárogjon ki.
+// Onnantól ezen a gépen a napi limit nem vonatkozik rád.
+// ------------------------------------------------------------------
+const BYPASS_KEY_STORAGE = "aiseoklub_bypass_key";
+
+function readBypassKey() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const fromUrl = params.get("key");
+    if (fromUrl) {
+      localStorage.setItem(BYPASS_KEY_STORAGE, fromUrl);
+      params.delete("key");
+      const qs = params.toString();
+      window.history.replaceState({}, "", window.location.pathname + (qs ? `?${qs}` : ""));
+      return fromUrl;
+    }
+    return localStorage.getItem(BYPASS_KEY_STORAGE) || "";
+  } catch {
+    return "";
+  }
+}
+
+async function runRemoteScan(targetUrl, key) {
   const res = await fetch(
-    `/api/scan?url=${encodeURIComponent(targetUrl)}&email=${encodeURIComponent(email || "")}`
+    `/api/scan?url=${encodeURIComponent(targetUrl)}&key=${encodeURIComponent(key || "")}`
   );
   if (res.status === 429) {
     const body = await res.json().catch(() => ({}));
@@ -1065,6 +1089,7 @@ export default function AiVisibilityAudit() {
   const [leadInfo, setLeadInfo] = useState(null);
   const [auditsUsed, setAuditsUsed] = useState(0);
   const [showCookieBanner, setShowCookieBanner] = useState(false);
+  const [bypassKey] = useState(readBypassKey);
   const scanningRef = useRef(false);
 
   useEffect(() => {
@@ -1136,7 +1161,7 @@ export default function AiVisibilityAudit() {
     try {
       // A limitről a szerver dönt: a korlátlan címeket ő ismeri fel. Ezért itt
       // nem blokkolunk előre, és a helyi számlálót is csak utólag növeljük.
-      const data = await runRemoteScan(normalized, email.trim());
+      const data = await runRemoteScan(normalized, bypassKey);
       setResult(data);
       setPhase("done");
       if (!data.unlimited) {

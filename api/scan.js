@@ -242,17 +242,17 @@ async function checkAndBumpDailyLimit(ip) {
 }
 
 // ---------------------------------------------------------------------
-// Korlátlan hozzáférésű email címek. A listát környezeti változóból
-// olvassuk (BYPASS_EMAILS, vesszővel elválasztva), hogy ne kerüljön bele a
-// nyilvános repóba. Az itt szereplő címekre a napi limit nem vonatkozik.
+// Korlátlan hozzáférés titkos kulccsal. A kulcsot környezeti változóban
+// tartjuk (BYPASS_KEY), sosem a kódban – a repó nyilvános. Aki ismeri a
+// kulcsot, arra a napi limit nem vonatkozik.
+//
+// Ha a BYPASS_KEY nincs beállítva, a megkerülés teljesen ki van kapcsolva
+// (üres kulccsal senki nem tud átjutni).
 // ---------------------------------------------------------------------
-function isUnlimitedEmail(email) {
-  if (!email) return false;
-  const list = (process.env.BYPASS_EMAILS || "")
-    .split(",")
-    .map((s) => s.trim().toLowerCase())
-    .filter(Boolean);
-  return list.includes(email.trim().toLowerCase());
+function isUnlimited(key) {
+  const secret = process.env.BYPASS_KEY;
+  if (!secret) return false;
+  return typeof key === "string" && key.length > 0 && key === secret;
 }
 
 function getClientIp(req) {
@@ -279,8 +279,8 @@ export default async function handler(req, res) {
     return;
   }
 
-  // A korlátlan hozzáférésű címeknél a számlálót meg sem érintjük.
-  const unlimited = isUnlimitedEmail(req.query.email);
+  // Érvényes titkos kulcs esetén a számlálót meg sem érintjük.
+  const unlimited = isUnlimited(req.query.key);
   if (!unlimited) {
     const ip = getClientIp(req);
     const { allowed, remaining } = await checkAndBumpDailyLimit(ip);
