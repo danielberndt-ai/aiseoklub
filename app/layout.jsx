@@ -4,7 +4,7 @@ const SITE_URL = "https://audit.aiseoklub.hu";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "AI-láthatósági audit | AI SEO Klub",
+  title: "Ingyenes AI-láthatósági audit weboldalakhoz | AI SEO Klub",
   description:
     "Ingyenes AI-láthatósági audit: nézd meg, mennyire látja a weboldaladat a ChatGPT, a Claude, a Gemini, a Perplexity és a Google AI keresése.",
   keywords: ["ai seo", "ai láthatóság"],
@@ -16,7 +16,7 @@ export const metadata = {
     locale: "hu_HU",
     url: SITE_URL,
     siteName: "AI SEO Klub",
-    title: "AI-láthatósági audit | AI SEO Klub",
+    title: "Ingyenes AI-láthatósági audit weboldalakhoz | AI SEO Klub",
     description:
       "Ingyenes AI-láthatósági audit: nézd meg, mennyire látja a weboldaladat a ChatGPT, a Claude, a Gemini, a Perplexity és a Google AI keresése.",
     // JPEG és nem WebP: a LinkedIn a WebP megosztási képet gyakran nem jeleníti meg.
@@ -31,7 +31,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI-láthatósági audit | AI SEO Klub",
+    title: "Ingyenes AI-láthatósági audit weboldalakhoz | AI SEO Klub",
     description:
       "Nézd meg, mennyire látja a weboldaladat a ChatGPT, a Claude, a Gemini és a Perplexity.",
     images: ["/og-image.jpg"],
