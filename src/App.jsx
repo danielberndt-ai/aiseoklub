@@ -1034,7 +1034,6 @@ function CookieBanner({ onDecide }) {
         </div>
 
         <p style={{ margin: "14px 0 0", fontSize: 12, color: "#4B5563" }}>
-          Részletek:{" "}
           <a href={CONFIG.COOKIE_POLICY_URL} style={{ color: T.bg, fontWeight: 600 }}>
             Süti tájékoztató
           </a>{" "}
