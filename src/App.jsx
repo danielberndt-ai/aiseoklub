@@ -891,13 +891,13 @@ function CategoryRow({ title, desc, checked, onChange, locked }) {
         }}
       />
       <div style={{ minWidth: 0 }}>
-        <div style={{ fontSize: 13.5, fontWeight: 600, color: "#1B2320" }}>
+        <div style={{ fontSize: 13.5, fontWeight: 600, color: "#111917" }}>
           {title}
           {locked && (
-            <span style={{ fontFamily: FONT_MONO, fontSize: 10.5, color: "#5C6B6A", marginLeft: 8 }}>MINDIG AKTÍV</span>
+            <span style={{ fontFamily: FONT_MONO, fontSize: 10.5, color: "#3A4644", marginLeft: 8 }}>MINDIG AKTÍV</span>
           )}
         </div>
-        <div style={{ fontSize: 12.5, color: "#4B5563", lineHeight: 1.5, marginTop: 2 }}>{desc}</div>
+        <div style={{ fontSize: 12.5, color: "#2A3331", lineHeight: 1.5, marginTop: 2 }}>{desc}</div>
       </div>
     </div>
   );
@@ -938,7 +938,7 @@ function CookieBanner({ onDecide }) {
         style={{
           // "Liquid glass": áttetsző alap + erős háttér-elmosás, hogy az alatta
           // lévő tartalom átderengjen, de a szöveg olvasható maradjon.
-          background: "rgba(244,241,234,0.42)",
+          background: "rgba(244,241,234,0.55)",
           backdropFilter: "blur(30px) saturate(180%)",
           WebkitBackdropFilter: "blur(30px) saturate(180%)",
           border: "1px solid rgba(255,255,255,0.45)",
@@ -1033,12 +1033,12 @@ function CookieBanner({ onDecide }) {
           )}
         </div>
 
-        <p style={{ margin: "14px 0 0", fontSize: 12, color: "#4B5563" }}>
-          <a href={CONFIG.COOKIE_POLICY_URL} style={{ color: T.bg, fontWeight: 600 }}>
+        <p style={{ margin: "14px 0 0", fontSize: 12, color: "#2A3331" }}>
+          <a href={CONFIG.COOKIE_POLICY_URL} style={{ color: T.bg, fontWeight: 600, textDecoration: "none" }}>
             Süti tájékoztató
           </a>{" "}
           ·{" "}
-          <a href={CONFIG.PRIVACY_POLICY_URL} style={{ color: T.bg, fontWeight: 600 }}>
+          <a href={CONFIG.PRIVACY_POLICY_URL} style={{ color: T.bg, fontWeight: 600, textDecoration: "none" }}>
             Adatkezelési tájékoztató
           </a>
         </p>
