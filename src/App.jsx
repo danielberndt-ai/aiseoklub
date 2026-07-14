@@ -655,6 +655,31 @@ function IconGlobe() {
   );
 }
 
+function IconBot() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="4" y="8" width="16" height="12" rx="3" />
+      <path d="M12 8V4M9 14h.01M15 14h.01M2 13h2M20 13h2" />
+    </svg>
+  );
+}
+function IconTag() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0l-7.2-7.2A2 2 0 0 1 3 12V5a2 2 0 0 1 2-2h7a2 2 0 0 1 1.4.6l7.2 7.2a2 2 0 0 1 0 2.6Z" />
+      <path d="M7.5 7.5h.01" />
+    </svg>
+  );
+}
+function IconLayout() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <path d="M3 9h18M9 9v12" />
+    </svg>
+  );
+}
+
 const AUDIT_FEATURES = [
   {
     icon: IconFiles,
@@ -670,6 +695,21 @@ const AUDIT_FEATURES = [
     icon: IconGlobe,
     title: "Indexelhetőség és nyelv",
     desc: "Canonical, sitemap és a használt nyelv jelölése, ami nélkül az AI keresők sokszor észre sem veszik az oldaladat.",
+  },
+  {
+    icon: IconBot,
+    title: "AI crawlerek botonként",
+    desc: "Botonként megmutatja, hogy a GPTBot, a ClaudeBot, a PerplexityBot vagy a Google-Extended engedélyezve van-e. Amit itt blokkolsz, az az AI keresőkben nem létezik.",
+  },
+  {
+    icon: IconTag,
+    title: "Meta és Open Graph",
+    desc: "A title, a meta description és az Open Graph tagek adják azt a kivonatot, amiből az AI a válaszaiban idéz és hivatkozik rád.",
+  },
+  {
+    icon: IconLayout,
+    title: "Tartalmi szerkezet",
+    desc: "H1 főcím, tiszta címsor-hierarchia, listák és táblázatok. A jól tagolt tartalmat az AI könnyebben bontja idézhető részekre.",
   },
 ];
 
@@ -688,7 +728,7 @@ function FeatureCards() {
       >
         MIT NÉZ ÁT AZ AUDIT
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: 16 }}>
+      <div className="feature-grid">
         {AUDIT_FEATURES.map((f, i) => {
           const Icon = f.icon;
           return (
@@ -791,7 +831,7 @@ function CookieBanner({ onAccept, onReject }) {
             onClick={onAccept}
             style={{
               background: T.orange,
-              color: "#0A0A0C",
+              color: "#FFFFFF",
               border: "none",
               borderRadius: 11,
               padding: "10px 18px",
@@ -989,6 +1029,8 @@ export default function AiVisibilityAudit() {
         input::placeholder { color: rgba(246,246,245,0.28); }
         input:focus, button:focus-visible { outline: 2px solid #FF8C00; outline-offset: 2px; }
         .glow-bg { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
+        .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        @media (max-width: 760px) { .feature-grid { grid-template-columns: 1fr; } }
         @media (prefers-reduced-motion: reduce) {
           .ring-spin, .fade-up, .soft-pulse { animation: none; }
         }
@@ -1064,7 +1106,7 @@ export default function AiVisibilityAudit() {
                   style={{
                     marginTop: 30,
                     background: T.orange,
-                    color: "#0A0A0C",
+                    color: "#FFFFFF",
                     border: "none",
                     borderRadius: 14,
                     padding: "16px 30px",
@@ -1129,7 +1171,7 @@ export default function AiVisibilityAudit() {
                     disabled={remaining <= 0}
                     style={{
                       background: remaining <= 0 ? "rgba(255,140,0,0.35)" : T.orange,
-                      color: "#0A0A0C",
+                      color: "#FFFFFF",
                       border: "none",
                       borderRadius: 13,
                       padding: "15px 20px",
@@ -1200,7 +1242,7 @@ export default function AiVisibilityAudit() {
             <button
               className="cta"
               onClick={resetToForm}
-              style={{ background: T.orange, color: "#0A0A0C", border: "none", borderRadius: 13, padding: "13px 20px", fontFamily: FONT_DISPLAY, fontWeight: FONT_DISPLAY_WEIGHT, fontSize: 15, cursor: "pointer" }}
+              style={{ background: T.orange, color: "#FFFFFF", border: "none", borderRadius: 13, padding: "13px 20px", fontFamily: FONT_DISPLAY, fontWeight: FONT_DISPLAY_WEIGHT, fontSize: 15, cursor: "pointer" }}
             >
               Újrapróbálom
             </button>
