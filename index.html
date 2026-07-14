@@ -11,6 +11,9 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <!-- Pontosan a body background-color-jával egyezik, és a lap felső pereme is
+         ez a szín – így a böngészősáv és a tartalom között nincs látható határ. -->
+    <meta name="theme-color" content="#010f0e" />
     <title>AI-láthatósági audit | AI SEO Klub</title>
     <meta
       name="description"
@@ -20,21 +23,26 @@
       * { box-sizing: border-box; }
       html, body { margin: 0; padding: 0; }
 
-      /* A háttér-színátmenet SZÁNDÉKOSAN a <body>-n van, nem egy belső div-en.
-         A böngésző a safe area-kat (a státuszsáv és az eszköztár mögötti sávot)
-         a body hátterével festi ki – ha itt csak tömör szín lenne, ott látható
-         sáv keletkezne, miközben a tartalom színátmenettel indul.
-         Így a háttér seamlessen befut a böngésző sávjai mögé. */
+      /* FONTOS: a WebKit (Safari, Comet) a böngészősávok mögötti safe area-t a
+         body BACKGROUND-COLOR-jával festi ki – a background-image-et (a
+         színátmenetet) figyelmen kívül hagyja. Ezért a lap felső peremének is
+         pontosan ugyanezt a színt kell mutatnia, különben éles sáv látszik.
+
+         Megoldás: a radiális ragyogás fölé egy sötétítő átmenet kerül, ami a
+         képernyő tetején pontosan #010f0e (a background-color), és lefelé
+         kioldódik. Így a sáv és a tartalom egybeolvad. */
       body {
         background-color: #010f0e;
-        background-image: radial-gradient(
-          ellipse 1200px 700px at 50% -10%,
-          #0d4f4c 0%,
-          #08403d 28%,
-          #042f2e 55%,
-          #021d1c 80%,
-          #010f0e 100%
-        );
+        background-image:
+          linear-gradient(to bottom, #010f0e 0px, rgba(1, 15, 14, 0) 190px),
+          radial-gradient(
+            ellipse 1200px 700px at 50% 6%,
+            #0d4f4c 0%,
+            #08403d 28%,
+            #042f2e 55%,
+            #021d1c 80%,
+            #010f0e 100%
+          );
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: cover;
