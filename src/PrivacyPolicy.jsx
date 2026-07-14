@@ -209,7 +209,19 @@ export default function PrivacyPolicy() {
             email címeddel, és kizárólag a visszaélés-szerű használat megakadályozását szolgálja.
           </P>
 
-          <H3>3.3. Sütik és mérőkódok (Google Pixel, Meta Pixel)</H3>
+          <h3
+            id="sutik"
+            style={{
+              fontFamily: FONT_DISPLAY,
+              fontWeight: FONT_DISPLAY_WEIGHT,
+              fontSize: 16.5,
+              color: T.orange,
+              margin: "24px 0 8px",
+              scrollMarginTop: 24,
+            }}
+          >
+            3.3. Sütik és mérőkódok (Google Pixel, Meta Pixel)
+          </h3>
           <P>
             Az audit.aiseoklub.hu alkalmazás egy süti-elfogadó sávval indul, ami alapértelmezetten{" "}
             <strong style={{ color: T.text }}>semmilyen mérőkódot nem tölt be</strong>. A Google Pixelt és a Meta Pixelt kizárólag

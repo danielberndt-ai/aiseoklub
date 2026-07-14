@@ -17,11 +17,18 @@ const CONFIG = {
   SHOW_UPSELL: false,         // Upsell blokk: később élesítjük
 
   // --- Süti-hozzájárulás és mérőkódok ---
-  // TODO (éles): töltsd ki a saját Google és Meta azonosítóiddal, amíg üres,
-  // a bannerben elfogadás után sem töltődik be semmilyen mérőkód.
-  GOOGLE_PIXEL_ID: "", // pl. "G-XXXXXXXXXX" vagy "AW-XXXXXXXXX"
-  META_PIXEL_ID: "",   // pl. "1234567890123456"
+  // TODO (éles): töltsd ki a saját azonosítóiddal. Amíg üresek, a bannerben
+  // adott hozzájárulás után sem töltődik be semmilyen mérőkód.
+  //
+  // A kategóriák elkülönítése szándékos: a NAIH álláspontja szerint a
+  // hozzájárulást célonként, külön-külön kell beszerezni, nem lehet egyetlen
+  // gombbal mindenre.
+  GOOGLE_ANALYTICS_ID: "", // "statisztika" kategória, pl. "G-XXXXXXXXXX"
+  GOOGLE_PIXEL_ID: "",     // "marketing" kategória (Google Ads), pl. "AW-XXXXXXXXX"
+  META_PIXEL_ID: "",       // "marketing" kategória, pl. "1234567890123456"
+
   PRIVACY_POLICY_URL: "/adatvedelmi-tajekoztato",
+  COOKIE_POLICY_URL: "/adatvedelmi-tajekoztato#sutik",
 };
 
 const T = {
@@ -158,25 +165,32 @@ function bumpTodayCount() {
 // ------------------------------------------------------------------
 // Süti-hozzájárulás kezelése és a mérőkódok feltételes betöltése
 // ------------------------------------------------------------------
-const CONSENT_STORAGE_KEY = "aiseoklub_cookie_consent_v1";
+// A tároló verziószáma azért v2, mert a hozzájárulás szerkezete megváltozott
+// (kategóriánkénti bontás). A régi, v1-es döntéseket nem vesszük érvényesnek:
+// azoknál újra megkérdezzük a látogatót, kategóriánként.
+const CONSENT_STORAGE_KEY = "aiseoklub_cookie_consent_v2";
+
+// A "feltétlenül szükséges" kategória nem kapcsolható és nem is igényel
+// hozzájárulást, ezért nem is tároljuk külön.
+const EMPTY_CONSENT = { analytics: false, marketing: false };
 
 function readStoredConsent() {
   try {
     const raw = localStorage.getItem(CONSENT_STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    if (typeof parsed?.marketing !== "boolean") return null;
-    return parsed;
+    if (typeof parsed?.analytics !== "boolean" || typeof parsed?.marketing !== "boolean") return null;
+    return { analytics: parsed.analytics, marketing: parsed.marketing };
   } catch {
     return null;
   }
 }
 
-function writeStoredConsent(marketing) {
+function writeStoredConsent({ analytics, marketing }) {
   try {
     localStorage.setItem(
       CONSENT_STORAGE_KEY,
-      JSON.stringify({ marketing, decidedAt: new Date().toISOString() })
+      JSON.stringify({ analytics, marketing, decidedAt: new Date().toISOString() })
     );
   } catch {
     // A localStorage nem minden esetben elérhető (pl. inkognitó mód, letiltott sütik).
@@ -184,24 +198,47 @@ function writeStoredConsent(marketing) {
   }
 }
 
-// A Google Pixel (gtag.js) és a Meta Pixel csak KIFEJEZETT hozzájárulás
-// után töltődik be. Amíg a CONFIG-ban üres az azonosító, semmi nem fut le.
+// ------------------------------------------------------------------
+// Mérőkód-betöltés. FONTOS: ezek a függvények KIZÁRÓLAG a látogató
+// kifejezett, kategóriánkénti hozzájárulása után futhatnak le. Az oldal
+// betöltésekor semmilyen mérőkód nem települ (előzetes hozzájárulás elve).
+// ------------------------------------------------------------------
+function ensureGtag() {
+  if (window.__aiseoklubGtagInit) return;
+  window.__aiseoklubGtagInit = true;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () {
+    window.dataLayer.push(arguments);
+  };
+  window.gtag("js", new Date());
+}
+
+function injectGtagScript(id) {
+  const s = document.createElement("script");
+  s.async = true;
+  s.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
+  document.head.appendChild(s);
+}
+
+// "Statisztika / analitika" kategória
+function loadAnalytics() {
+  if (typeof window === "undefined") return;
+  if (!CONFIG.GOOGLE_ANALYTICS_ID || window.__aiseoklubAnalyticsLoaded) return;
+  window.__aiseoklubAnalyticsLoaded = true;
+  ensureGtag();
+  injectGtagScript(CONFIG.GOOGLE_ANALYTICS_ID);
+  window.gtag("config", CONFIG.GOOGLE_ANALYTICS_ID);
+}
+
+// "Marketing" kategória: Google Pixel (Ads) és Meta Pixel
 function loadMarketingPixels() {
   if (typeof window === "undefined") return;
 
   if (CONFIG.GOOGLE_PIXEL_ID && !window.__aiseoklubGooglePixelLoaded) {
     window.__aiseoklubGooglePixelLoaded = true;
-    const s = document.createElement("script");
-    s.async = true;
-    s.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.GOOGLE_PIXEL_ID}`;
-    document.head.appendChild(s);
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      window.dataLayer.push(arguments);
-    }
-    window.gtag = gtag;
-    gtag("js", new Date());
-    gtag("config", CONFIG.GOOGLE_PIXEL_ID);
+    ensureGtag();
+    injectGtagScript(CONFIG.GOOGLE_PIXEL_ID);
+    window.gtag("config", CONFIG.GOOGLE_PIXEL_ID);
   }
 
   if (CONFIG.META_PIXEL_ID && !window.__aiseoklubMetaPixelLoaded) {
@@ -227,6 +264,11 @@ function loadMarketingPixels() {
     window.fbq("init", CONFIG.META_PIXEL_ID);
     window.fbq("track", "PageView");
   }
+}
+
+function applyConsent(consent) {
+  if (consent?.analytics) loadAnalytics();
+  if (consent?.marketing) loadMarketingPixels();
 }
 
 // ------------------------------------------------------------------
@@ -807,7 +849,66 @@ function FeatureCards() {
 // Süti-elfogadó sáv – a Google Pixel és a Meta Pixel csak ide kötött
 // kifejezett hozzájárulás után töltődik be, sosem automatikusan.
 // ------------------------------------------------------------------
-function CookieBanner({ onAccept, onReject }) {
+// A két fő gomb szándékosan AZONOS méretű és súlyú: a hozzájárulás megtagadása
+// nem lehet nehezebb, mint a megadása (nincs "sötét minta").
+const consentBtnBase = {
+  border: "none",
+  borderRadius: 11,
+  padding: "11px 18px",
+  fontFamily: FONT_DISPLAY,
+  fontWeight: FONT_DISPLAY_WEIGHT,
+  fontSize: 13.5,
+  cursor: "pointer",
+  whiteSpace: "nowrap",
+  color: "#FFFFFF",
+  minWidth: 128,
+};
+
+function CategoryRow({ title, desc, checked, onChange, locked }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        gap: 12,
+        alignItems: "flex-start",
+        padding: "12px 0",
+        borderTop: "1px solid rgba(4,47,46,0.10)",
+      }}
+    >
+      <input
+        type="checkbox"
+        checked={checked}
+        disabled={locked}
+        onChange={(e) => onChange && onChange(e.target.checked)}
+        style={{
+          marginTop: 2,
+          width: 16,
+          height: 16,
+          accentColor: T.orange,
+          flexShrink: 0,
+          cursor: locked ? "not-allowed" : "pointer",
+        }}
+      />
+      <div style={{ minWidth: 0 }}>
+        <div style={{ fontSize: 13.5, fontWeight: 600, color: "#1B2320" }}>
+          {title}
+          {locked && (
+            <span style={{ fontFamily: FONT_MONO, fontSize: 10.5, color: "#5C6B6A", marginLeft: 8 }}>MINDIG AKTÍV</span>
+          )}
+        </div>
+        <div style={{ fontSize: 12.5, color: "#4B5563", lineHeight: 1.5, marginTop: 2 }}>{desc}</div>
+      </div>
+    </div>
+  );
+}
+
+function CookieBanner({ onDecide }) {
+  const [showSettings, setShowSettings] = useState(false);
+  // Alapból MINDEN opcionális kategória KI van kapcsolva – előre bepipált
+  // jelölőnégyzet nem lenne érvényes hozzájárulás.
+  const [analytics, setAnalytics] = useState(false);
+  const [marketing, setMarketing] = useState(false);
+
   return (
     <div
       role="dialog"
@@ -833,60 +934,102 @@ function CookieBanner({ onAccept, onReject }) {
           maxWidth: 720,
           width: "100%",
           padding: "20px 22px",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 16,
-          alignItems: "center",
+          maxHeight: "80vh",
+          overflowY: "auto",
         }}
       >
-        <div style={{ flex: "1 1 320px", minWidth: 220 }}>
-          <p style={{ margin: 0, fontSize: 13.5, color: "#1B2320", lineHeight: 1.55 }}>
-            Ez az oldal sütiket használ a megfelelő működés érdekében.
-            <br />
-            <a href={CONFIG.PRIVACY_POLICY_URL} style={{ color: T.bg, fontWeight: 600, textDecoration: "underline" }}>
-              Adatvédelmi tájékoztató
-            </a>
-          </p>
-        </div>
-        <div style={{ display: "flex", gap: 10, flexShrink: 0 }}>
-          <button
-            className="ghost"
-            onClick={onReject}
-            style={{
-              background: "transparent",
-              color: "#1B2320",
-              border: "1px solid rgba(4,47,46,0.25)",
-              borderRadius: 11,
-              padding: "10px 16px",
-              fontFamily: FONT_DISPLAY,
-              fontWeight: FONT_DISPLAY_WEIGHT,
-              fontSize: 13.5,
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-            }}
-          >
-            Elutasítom
-          </button>
+        <p style={{ margin: 0, fontSize: 13.5, color: "#1B2320", lineHeight: 1.6 }}>
+          Ez az oldal sütiket használ a működéséhez, statisztikához és marketinghez. A feltétlenül szükséges sütik
+          automatikusan bekapcsolnak, a többiről te döntesz. A marketing sütik (pl. Google, Meta) csak a hozzájárulásod
+          után töltődnek be.
+        </p>
+
+        {showSettings && (
+          <div style={{ marginTop: 14 }}>
+            <CategoryRow
+              locked
+              checked
+              title="Feltétlenül szükséges"
+              desc="Az oldal alapvető működéséhez és a süti-döntésed megjegyzéséhez kell. Nem küld adatot harmadik félnek."
+            />
+            <CategoryRow
+              title="Statisztika / analitika"
+              desc="Névtelen látogatottsági adatok, hogy lássam, mi működik az oldalon."
+              checked={analytics}
+              onChange={setAnalytics}
+            />
+            <CategoryRow
+              title="Marketing"
+              desc="Google Pixel és Meta Pixel: a hirdetéseim eredményességének mérése és remarketing."
+              checked={marketing}
+              onChange={setMarketing}
+            />
+          </div>
+        )}
+
+        <div
+          style={{
+            display: "flex",
+            gap: 10,
+            flexWrap: "wrap",
+            alignItems: "center",
+            marginTop: 16,
+          }}
+        >
           <button
             className="cta"
-            onClick={onAccept}
-            style={{
-              background: T.orange,
-              color: "#FFFFFF",
-              border: "none",
-              borderRadius: 11,
-              padding: "10px 18px",
-              fontFamily: FONT_DISPLAY,
-              fontWeight: FONT_DISPLAY_WEIGHT,
-              fontSize: 13.5,
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-              boxShadow: "0 0 20px rgba(255,140,0,0.3)",
-            }}
+            onClick={() => onDecide({ analytics: true, marketing: true })}
+            style={{ ...consentBtnBase, background: T.orange }}
           >
             Elfogadom
           </button>
+          <button
+            className="cta"
+            onClick={() => onDecide({ analytics: false, marketing: false })}
+            style={{ ...consentBtnBase, background: "#1B2320" }}
+          >
+            Elutasítom
+          </button>
+
+          {showSettings ? (
+            <button
+              className="ghost"
+              onClick={() => onDecide({ analytics, marketing })}
+              style={{
+                ...consentBtnBase,
+                background: "transparent",
+                color: "#1B2320",
+                border: "1px solid rgba(4,47,46,0.35)",
+              }}
+            >
+              Kiválasztottak mentése
+            </button>
+          ) : (
+            <button
+              className="ghost"
+              onClick={() => setShowSettings(true)}
+              style={{
+                ...consentBtnBase,
+                background: "transparent",
+                color: "#1B2320",
+                border: "1px solid rgba(4,47,46,0.35)",
+              }}
+            >
+              Beállítások
+            </button>
+          )}
         </div>
+
+        <p style={{ margin: "14px 0 0", fontSize: 12, color: "#4B5563" }}>
+          Részletek:{" "}
+          <a href={CONFIG.COOKIE_POLICY_URL} style={{ color: T.bg, fontWeight: 600 }}>
+            Süti tájékoztató
+          </a>{" "}
+          ·{" "}
+          <a href={CONFIG.PRIVACY_POLICY_URL} style={{ color: T.bg, fontWeight: 600 }}>
+            Adatkezelési tájékoztató
+          </a>
+        </p>
       </div>
     </div>
   );
@@ -914,21 +1057,21 @@ export default function AiVisibilityAudit() {
   useEffect(() => {
     const stored = readStoredConsent();
     if (stored === null) {
+      // Még nem döntött: a banner megjelenik, és addig SEMMILYEN mérőkód
+      // nem töltődik be (előzetes hozzájárulás elve).
       setShowCookieBanner(true);
-    } else if (stored.marketing) {
-      loadMarketingPixels();
+    } else {
+      applyConsent(stored);
     }
   }, []);
 
-  function handleCookieAccept() {
-    writeStoredConsent(true);
+  // Egyetlen belépési pont: az "Elfogadom", az "Elutasítom" és a
+  // "Kiválasztottak mentése" is ide fut be, kategóriánkénti értékekkel.
+  function handleCookieDecision(consent) {
+    const decision = { ...EMPTY_CONSENT, ...consent };
+    writeStoredConsent(decision);
     setShowCookieBanner(false);
-    loadMarketingPixels();
-  }
-
-  function handleCookieReject() {
-    writeStoredConsent(false);
-    setShowCookieBanner(false);
+    applyConsent(decision);
   }
 
   const remaining = Math.max(0, CONFIG.DAILY_LIMIT - auditsUsed);
@@ -1411,7 +1554,7 @@ export default function AiVisibilityAudit() {
         </div>
       </footer>
 
-      {showCookieBanner && <CookieBanner onAccept={handleCookieAccept} onReject={handleCookieReject} />}
+      {showCookieBanner && <CookieBanner onDecide={handleCookieDecision} />}
     </div>
   );
 }
