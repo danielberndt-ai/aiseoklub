@@ -177,7 +177,7 @@ export default function PrivacyPolicy() {
 
           <H2>3. Milyen adatokat kezelek, és milyen célból</H2>
 
-          <H3>3.1. Hírlevél feliratkozás (Substack, MailerLite)</H3>
+          <H3>3.1. Hírlevél feliratkozás (Substack)</H3>
           <P>Amikor feliratkozol az AI SEO Klub hírlevélre, a következő adatokat kezelem:</P>
           <ul style={{ margin: "0 0 14px", paddingLeft: 20 }}>
             <li style={liStyle}>email cím</li>
@@ -200,8 +200,13 @@ export default function PrivacyPolicy() {
           </ul>
           <P>
             <strong style={{ color: T.text }}>Jogalap:</strong> a hozzájárulásod, amit az űrlapon lévő jelölőnégyzet bepipálásával adsz meg.{" "}
-            <strong style={{ color: T.text }}>Cél:</strong> a riport elkészítése és emailben történő elküldése, valamint a hírlevél-listára történő feliratkoztatásod.{" "}
+            <strong style={{ color: T.text }}>Cél:</strong> a riport elkészítése és emailben történő elküldése (Resend), valamint a
+            feliratkozásod nyilvántartása és AI SEO témájú levelek küldése.{" "}
             <strong style={{ color: T.text }}>Megőrzési idő:</strong> amíg le nem iratkozol, vagy amíg vissza nem vonod a hozzájárulásodat.
+          </P>
+          <P>
+            A megadott adatokat (email cím, a vizsgált weboldal címe, az audit eredménye és a feliratkozás időpontja) egy Google
+            Sheets táblázatban tartom nyilván, a riport-emailt pedig a Resend szolgáltatásán keresztül küldöm ki.
           </P>
           <P>
             Az eszköz naponta korlátozott számú ingyenes auditot enged, ehhez technikailag szükséges lehet a felhasznált
@@ -293,9 +298,14 @@ export default function PrivacyPolicy() {
               </thead>
               <tbody>
                 <tr>
-                  <td>MailerLite</td>
-                  <td>Hírlevél-küldés és automatizmus</td>
-                  <td>email cím, feliratkozási adatok, audit-eredmények</td>
+                  <td>Resend, Inc.</td>
+                  <td>A riport-email kiküldése</td>
+                  <td>email cím, a vizsgált weboldal címe, audit-eredmények</td>
+                </tr>
+                <tr>
+                  <td>Google Ireland Limited (Google Sheets)</td>
+                  <td>A feliratkozók és az audit-eredmények nyilvántartása</td>
+                  <td>email cím, weboldal címe, audit-eredmények, időpont</td>
                 </tr>
                 <tr>
                   <td>Substack Inc.</td>
@@ -306,6 +316,11 @@ export default function PrivacyPolicy() {
                   <td>Vercel Inc.</td>
                   <td>Az audit.aiseoklub.hu alkalmazás hostingja</td>
                   <td>technikai naplóadatok, IP-cím</td>
+                </tr>
+                <tr>
+                  <td>Upstash, Inc.</td>
+                  <td>A napi ingyenes audit-limit nyilvántartása</td>
+                  <td>anonim, IP-cím alapú számláló (email címhez nem kötve)</td>
                 </tr>
                 <tr>
                   <td>Google Ireland Limited</td>
@@ -327,10 +342,10 @@ export default function PrivacyPolicy() {
 
           <H2>5. Adattovábbítás az Európai Unión kívülre</H2>
           <P>
-            A Google, a Meta és a Vercel amerikai székhelyű vállalatok, ezért előfordulhat, hogy az általuk kezelt adatok az Európai
-            Gazdasági Térségen kívülre, az Egyesült Államokba kerülnek továbbításra. Ezt a továbbítást az EU-USA Adatvédelmi
-            Keretrendszer (EU-U.S. Data Privacy Framework), illetve a szolgáltatók által alkalmazott egyéb, a GDPR szerint megfelelő
-            garanciák (például általános szerződési feltételek) biztosítják.
+            A Google, a Meta, a Vercel, a Resend, az Upstash és a Substack amerikai székhelyű vállalatok, ezért előfordulhat, hogy az
+            általuk kezelt adatok az Európai Gazdasági Térségen kívülre, az Egyesült Államokba kerülnek továbbításra. Ezt a
+            továbbítást az EU-USA Adatvédelmi Keretrendszer (EU-U.S. Data Privacy Framework), illetve a szolgáltatók által
+            alkalmazott egyéb, a GDPR szerint megfelelő garanciák (például általános szerződési feltételek) biztosítják.
           </P>
 
           <H2>6. Milyen jogaid vannak</H2>
