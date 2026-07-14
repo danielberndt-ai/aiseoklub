@@ -277,8 +277,12 @@ function applyConsent(consent) {
 // robots.txt, llms.txt, agents.json, schema, meta és szerkezet-ellenőrzés,
 // determinisztikusan, AI nélkül. A daily limit is itt, szerveroldalon dől el.
 // ------------------------------------------------------------------
-async function runRemoteScan(targetUrl) {
-  const res = await fetch(`/api/scan?url=${encodeURIComponent(targetUrl)}`);
+async function runRemoteScan(targetUrl, email) {
+  // Az email azért megy át, mert a szerveren lehetnek korlátlan hozzáférésű
+  // címek (BYPASS_EMAILS), amikre a napi limit nem vonatkozik.
+  const res = await fetch(
+    `/api/scan?url=${encodeURIComponent(targetUrl)}&email=${encodeURIComponent(email || "")}`
+  );
   if (res.status === 429) {
     const body = await res.json().catch(() => ({}));
     const err = new Error("daily-limit-reached");
@@ -1122,23 +1126,23 @@ export default function AiVisibilityAudit() {
       setFormError("A riport küldéséhez szükség van a hozzájárulásodra.");
       return;
     }
-    if (remaining <= 0) {
-      setFormError(`Ma elérted a napi ${CONFIG.DAILY_LIMIT} auditot. Holnap újra próbálhatod.`);
-      return;
-    }
     if (scanningRef.current) return;
     scanningRef.current = true;
     setFormError("");
     setScanError("");
     setScannedUrl(normalized);
-    bumpTodayCount();
-    setAuditsUsed((u) => u + 1);
     setPhase("scan");
 
     try {
-      const data = await runRemoteScan(normalized);
+      // A limitről a szerver dönt: a korlátlan címeket ő ismeri fel. Ezért itt
+      // nem blokkolunk előre, és a helyi számlálót is csak utólag növeljük.
+      const data = await runRemoteScan(normalized, email.trim());
       setResult(data);
       setPhase("done");
+      if (!data.unlimited) {
+        bumpTodayCount();
+        setAuditsUsed((u) => u + 1);
+      }
 
       // A lead csak sikeres szkennelés UTÁN megy a MailerLite-nak, hogy a
       // pontszám és a kategóriánkénti bontás is átadható legyen merge tagként.
@@ -1370,7 +1374,9 @@ export default function AiVisibilityAudit() {
                   <button
                     className="cta"
                     onClick={handleStart}
-                    disabled={remaining <= 0}
+                    // Szándékosan NINCS disabled: a korlátlan hozzáférésű címek
+                    // a limit elérése után is indíthatnak auditot. A tényleges
+                    // korlátot a szerver érvényesíti, és 429-cel jelez vissza.
                     style={{
                       background: remaining <= 0 ? "rgba(255,140,0,0.35)" : T.orange,
                       color: remaining <= 0 ? "rgba(255,255,255,0.45)" : "#FFFFFF",
@@ -1380,7 +1386,7 @@ export default function AiVisibilityAudit() {
                       fontFamily: FONT_DISPLAY,
                       fontWeight: FONT_DISPLAY_WEIGHT,
                       fontSize: 16,
-                      cursor: remaining <= 0 ? "not-allowed" : "pointer",
+                      cursor: "pointer",
                       boxShadow: remaining <= 0 ? "none" : "0 0 28px rgba(255,140,0,0.35)",
                     }}
                   >

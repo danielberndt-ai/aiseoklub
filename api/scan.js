@@ -241,6 +241,20 @@ async function checkAndBumpDailyLimit(ip) {
   return { allowed: current + 1 <= DAILY_LIMIT, remaining: Math.max(0, DAILY_LIMIT - (current + 1)) };
 }
 
+// ---------------------------------------------------------------------
+// Korlátlan hozzáférésű email címek. A listát környezeti változóból
+// olvassuk (BYPASS_EMAILS, vesszővel elválasztva), hogy ne kerüljön bele a
+// nyilvános repóba. Az itt szereplő címekre a napi limit nem vonatkozik.
+// ---------------------------------------------------------------------
+function isUnlimitedEmail(email) {
+  if (!email) return false;
+  const list = (process.env.BYPASS_EMAILS || "")
+    .split(",")
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
+  return list.includes(email.trim().toLowerCase());
+}
+
 function getClientIp(req) {
   const fwd = req.headers["x-forwarded-for"];
   if (typeof fwd === "string" && fwd.length > 0) return fwd.split(",")[0].trim();
@@ -265,11 +279,15 @@ export default async function handler(req, res) {
     return;
   }
 
-  const ip = getClientIp(req);
-  const { allowed, remaining } = await checkAndBumpDailyLimit(ip);
-  if (!allowed) {
-    res.status(429).json({ error: "daily_limit_reached", remaining });
-    return;
+  // A korlátlan hozzáférésű címeknél a számlálót meg sem érintjük.
+  const unlimited = isUnlimitedEmail(req.query.email);
+  if (!unlimited) {
+    const ip = getClientIp(req);
+    const { allowed, remaining } = await checkAndBumpDailyLimit(ip);
+    if (!allowed) {
+      res.status(429).json({ error: "daily_limit_reached", remaining });
+      return;
+    }
   }
 
   const [robotsRes, llmsRes, agentsRes, agentsWellKnownRes, homepageRes] = await Promise.all([
@@ -316,6 +334,7 @@ export default async function handler(req, res) {
   }
 
   const result = {
+    unlimited, // a kliens ebből tudja, hogy ne növelje a helyi napi számlálót
     robots: { found: robotsFound, bots },
     llms: { found: llmsRes.ok },
     agents: { found: agentsRes.ok || agentsWellKnownRes.ok },
