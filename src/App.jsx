@@ -745,7 +745,7 @@ const AUDIT_FEATURES = [
   {
     icon: IconShield,
     title: "Nincs AI-találgatás",
-    desc: "Minden ellenőrzés valódi lekérdezés: robots.txt, HTML, schema. Valós lekérdezések valós eredmények.",
+    desc: "Minden ellenőrzés valódi lekérdezés: robots.txt, HTML, schema. Valós lekérdezések, valós eredmények.",
   },
   {
     icon: IconMail,
