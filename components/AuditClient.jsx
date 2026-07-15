@@ -812,7 +812,7 @@ const AUDIT_FEATURES = [
   {
     icon: IconFiles,
     title: "AI-felfedezési fájlok",
-    desc: "A robots.txt, az llms.txt és az agents.json alapján megnézi, mely AI robotok férnek egyáltalán hozzá az oldaladhoz.",
+    desc: "A robots.txt, az llms.txt és az agents.json alapján megnézi, mely AI robotok férnek hozzá az oldaladhoz.",
   },
   {
     icon: IconCode,
