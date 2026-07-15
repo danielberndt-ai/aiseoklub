@@ -1561,7 +1561,7 @@ export default function AiVisibilityAudit() {
                   {prettyUrl(scannedUrl)} ↗
                 </a>
                 <span style={{ fontSize: 11, color: T.faint, lineHeight: 1.4 }}>
-                  (a domain főoldalát vizsgáltuk)
+                  (a domain főoldalát vizsgálva)
                 </span>
               </div>
 
