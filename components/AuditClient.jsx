@@ -1613,22 +1613,22 @@ export default function AiVisibilityAudit() {
         }}
       >
         <div style={{ maxWidth: 960, margin: "0 auto", fontSize: 12, color: T.footerText, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
-          <span>
-            <a href="https://aiseoklub.hu" style={{ color: T.footerText, textDecoration: "none" }}>
+          <span style={{ display: "inline-flex", alignItems: "center" }}>
+            <a className="footer-link" href="https://aiseoklub.hu" style={{ color: T.footerText, textDecoration: "none" }}>
               AI SEO Klub
-            </a>{" "}
-            ·{" "}
-            <a href="https://danielberndt.com/" target="_blank" rel="noopener noreferrer" style={{ color: T.footerText, textDecoration: "none" }}>
+            </a>
+            <span style={{ padding: "0 4px" }}>·</span>
+            <a className="footer-link" href="https://danielberndt.com/" target="_blank" rel="noopener noreferrer" style={{ color: T.footerText, textDecoration: "none" }}>
               Daniel Berndt
             </a>
           </span>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
             <button
+              className="footer-link"
               onClick={() => setShowCookieBanner(true)}
               style={{
                 background: "none",
                 border: "none",
-                padding: 0,
                 color: T.footerText,
                 fontSize: 12,
                 fontFamily: FONT_BODY,
@@ -1638,7 +1638,7 @@ export default function AiVisibilityAudit() {
             >
               Süti beállítások
             </button>
-            <a href={CONFIG.PRIVACY_POLICY_URL} style={{ color: T.footerText, textDecoration: "none" }}>
+            <a className="footer-link" href={CONFIG.PRIVACY_POLICY_URL} style={{ color: T.footerText, textDecoration: "none" }}>
               Adatvédelmi Tájékoztató
             </a>
           </div>

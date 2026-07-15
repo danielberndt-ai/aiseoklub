@@ -411,9 +411,10 @@ export default function PrivacyPolicy() {
         }}
       >
         <div style={{ maxWidth: 760, margin: "0 auto", fontSize: 12, color: T.footerText, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
-          <span>
-            <a href="https://aiseoklub.hu" style={{ color: T.footerText, textDecoration: "none" }}>AI SEO Klub</a> ·{" "}
-            <a href="https://danielberndt.com/" target="_blank" rel="noopener noreferrer" style={{ color: T.footerText, textDecoration: "none" }}>Daniel Berndt</a>
+          <span style={{ display: "inline-flex", alignItems: "center" }}>
+            <a className="footer-link" href="https://aiseoklub.hu" style={{ color: T.footerText, textDecoration: "none" }}>AI SEO Klub</a>
+            <span style={{ padding: "0 4px" }}>·</span>
+            <a className="footer-link" href="https://danielberndt.com/" target="_blank" rel="noopener noreferrer" style={{ color: T.footerText, textDecoration: "none" }}>Daniel Berndt</a>
           </span>
         </div>
       </footer>
