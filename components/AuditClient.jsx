@@ -87,6 +87,14 @@ const SCAN_STEPS = [
   "Pontszámok kiszámítása",
 ];
 
+// A szkennelő animáció mindig végigfut, hogy alapos átvizsgálás benyomását
+// keltse. A tényleges API-válasz gyakran ennél gyorsabb; ilyenkor megvárjuk a
+// hátralévő időt, mielőtt megjelenítjük az eredményt.
+const MIN_SCAN_MS = 5000;
+const SCAN_STEP_MS = Math.floor(MIN_SCAN_MS / SCAN_STEPS.length);
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 // ------------------------------------------------------------------
 // Lead beküldés – a saját Vercel API route-ot hívja (api/lead.js),
 // ami a szerveren, saját MailerLite API kulccsal küldi tovább az adatot.
@@ -1162,7 +1170,7 @@ export default function AiVisibilityAudit() {
     setStepIdx(0);
     const t = setInterval(() => {
       setStepIdx((i) => (i < SCAN_STEPS.length - 1 ? i + 1 : i));
-    }, 2400);
+    }, SCAN_STEP_MS);
     return () => clearInterval(t);
   }, [phase]);
 
@@ -1186,11 +1194,18 @@ export default function AiVisibilityAudit() {
     setScanError("");
     setScannedUrl(normalized);
     setPhase("scan");
+    const scanStartedAt = Date.now();
 
     try {
       // A limitről a szerver dönt: a korlátlan címeket ő ismeri fel. Ezért itt
       // nem blokkolunk előre, és a helyi számlálót is csak utólag növeljük.
       const data = await runRemoteScan(normalized, bypassKey);
+
+      // Az animáció mindig fusson végig (min. 5 mp), akkor is, ha az API
+      // gyorsabban válaszol – így az átvizsgálás alaposnak hat.
+      const elapsed = Date.now() - scanStartedAt;
+      if (elapsed < MIN_SCAN_MS) await wait(MIN_SCAN_MS - elapsed);
+
       setResult(data);
       setPhase("done");
       if (!data.unlimited) {
