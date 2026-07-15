@@ -8,6 +8,18 @@ export const metadata = {
   description:
     "Ingyenes AI-láthatósági audit: nézd meg, mennyire látja a weboldaladat a ChatGPT, a Claude, a Gemini, a Perplexity és a Google AI keresése.",
   keywords: ["ai seo", "ai láthatóság"],
+  // Explicit meta robots: engedélyezzük az indexelést és a linkkövetést, és a
+  // Google-specifikus direktívákkal a gazdagabb megjelenítést is kérjük.
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   alternates: {
     canonical: "/",
   },

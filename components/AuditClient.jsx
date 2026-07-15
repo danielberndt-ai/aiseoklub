@@ -371,6 +371,7 @@ function buildCategories(r) {
       weight: 20,
       findings: [
         { label: "Nincs noindex tiltás", ok: g(() => (r.index.noindex === null ? null : !r.index.noindex)) },
+        { label: "Nincs nofollow tiltás", ok: g(() => (r.index.nofollow == null ? null : !r.index.nofollow)) },
         { label: "Canonical beállítva", ok: g(() => r.index.canonical) },
         { label: "sitemap.xml elérhető", ok: g(() => r.index.sitemap) },
       ],

@@ -169,9 +169,15 @@ function analyzeHtml(html) {
   const langHu = typeof htmlLang === "string" && htmlLang.trim().length > 0;
   const ogTags = $('meta[property^="og:"]').length > 0;
 
-  // --- Indexelhetőség ---
+  // --- Indexelhetőség (meta robots tag) ---
+  // A "robots" mellett a Google-specifikus "googlebot" direktívát is nézzük,
+  // mert az felülírhatja az általánosat. A "none" a "noindex, nofollow"
+  // rövidítése, ezt is kezeljük.
   const robotsMeta = ($('meta[name="robots"]').attr("content") || "").toLowerCase();
-  const noindex = robotsMeta.includes("noindex");
+  const googlebotMeta = ($('meta[name="googlebot"]').attr("content") || "").toLowerCase();
+  const robotsCombined = `${robotsMeta} ${googlebotMeta}`;
+  const noindex = robotsCombined.includes("noindex") || robotsCombined.includes("none");
+  const nofollow = robotsCombined.includes("nofollow") || robotsCombined.includes("none");
   const canonical = $('link[rel="canonical"]').attr("href") ? true : false;
 
   // --- Tartalmi szerkezet ---
@@ -198,6 +204,7 @@ function analyzeHtml(html) {
     },
     index: {
       noindex,
+      nofollow,
       canonical,
     },
     struct: {
@@ -336,7 +343,7 @@ export async function GET(request) {
   let htmlAnalysis = {
     schemaData: { found: null, types: [], dateMod: null },
     meta: { title: null, titleLen: null, desc: null, descLen: null, langHu: null, og: null },
-    index: { noindex: null, canonical: null },
+    index: { noindex: null, nofollow: null, canonical: null },
     struct: { h1: null, hier: null, faq: null, lists: null },
   };
   if (homepageRes.ok && homepageRes.text) {
@@ -351,6 +358,7 @@ export async function GET(request) {
     agents: { found: agentsRes.ok || agentsWellKnownRes.ok },
     index: {
       noindex: htmlAnalysis.index.noindex,
+      nofollow: htmlAnalysis.index.nofollow,
       canonical: htmlAnalysis.index.canonical,
       sitemap: sitemapOk,
     },
