@@ -1161,7 +1161,9 @@ export default function AiVisibilityAudit() {
     if (!categories) return [];
     return categories
       .map((c) => ({ name: c.name, s: scoreCategory(c) }))
-      .filter((c) => c.s !== null)
+      // Csak a ténylegesen hiányos kategóriák számítanak "gyengének" – a 100
+      // pontos kategóriákat nem soroljuk fel javítanivalóként.
+      .filter((c) => c.s !== null && c.s < 100)
       .sort((a, b) => a.s - b.s)
       .slice(0, 2);
   }, [categories]);
@@ -1541,12 +1543,16 @@ export default function AiVisibilityAudit() {
                       ? "Látható vagy, de fontos pontokon veszítesz."
                       : "Az AI keresők most jórészt vakok az oldaladra."}
                   </h2>
-                  {worst.length > 0 && (
-                    <p style={{ color: T.sub, fontSize: 14.5, lineHeight: 1.6, margin: 0 }}>
-                      A leggyengébb területeid: {worst.map((w) => w.name.toLowerCase()).join(" és ")}. A részletes bontást lent
-                      találod.
-                    </p>
-                  )}
+                  <p style={{ color: T.sub, fontSize: 14.5, lineHeight: 1.6, margin: 0 }}>
+                    {worst.length > 0 ? (
+                      <>
+                        A leggyengébb területeid: {worst.map((w) => w.name.toLowerCase()).join(" és ")}. A részletes bontást lent
+                        találod.
+                      </>
+                    ) : (
+                      <>Minden vizsgált terület rendben — nincs javítanivaló. A részletes bontást lent találod.</>
+                    )}
+                  </p>
                 </div>
               </div>
             </section>
