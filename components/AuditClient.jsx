@@ -496,7 +496,9 @@ function ScoreRing({ value, size = 132, stroke = 11, spinning = false, animate =
       height={size}
       viewBox={`0 0 ${size} ${size}`}
       className={spinning ? "ring-spin" : ""}
-      style={{ display: "block" }}
+      // overflow: visible – különben az SVG a saját széléhez vágja a kör
+      // drop-shadow glowját (a kör pont a viewBox széléig ér).
+      style={{ display: "block", overflow: "visible" }}
     >
       <defs>
         <linearGradient id={gid} x1="0" y1="0" x2="1" y2="1">
@@ -547,16 +549,26 @@ function ScoreBlock({ value, size = 148, run = true }) {
           </span>
         ) : (
           <>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 2 }}>
-              <span style={{ fontFamily: FONT_DISPLAY, fontSize: size * 0.34, fontWeight: FONT_DISPLAY_WEIGHT, color: col, lineHeight: 1 }}>
-                {num}
-              </span>
-              <span style={{ fontFamily: FONT_DISPLAY, fontSize: size * 0.15, fontWeight: 500, color: T.faint }}>/100</span>
-            </div>
+            <span style={{ fontFamily: FONT_DISPLAY, fontSize: size * 0.34, fontWeight: FONT_DISPLAY_WEIGHT, color: col, lineHeight: 1 }}>
+              {num}
+            </span>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6 }}>
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: col }} />
               <span style={{ fontSize: 12.5, color: T.sub, fontWeight: 500 }}>{scoreWord(value)}</span>
             </div>
+            {/* /100 külön, a kör alján: kisebb, nem félkövér, halványabb. */}
+            <span
+              style={{
+                fontFamily: FONT_DISPLAY,
+                fontSize: size * 0.11,
+                fontWeight: 400,
+                color: "rgba(246,246,245,0.28)",
+                marginTop: 4,
+                lineHeight: 1,
+              }}
+            >
+              /100
+            </span>
           </>
         )}
       </div>
