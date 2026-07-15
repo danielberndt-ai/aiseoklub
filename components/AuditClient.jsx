@@ -1414,10 +1414,10 @@ export default function AiVisibilityAudit() {
                     {!url && (
                       <button
                         type="button"
-                        onClick={() => setUrl("aiseoklub.hu")}
+                        onClick={() => setUrl("audit.aiseoklub.hu")}
                         style={{ alignSelf: "flex-start", background: "none", border: "none", padding: "2px 0", color: T.faint, fontSize: 11.5, fontFamily: FONT_BODY, cursor: "pointer" }}
                       >
-                        Nincs kéznél? Próbáld ki ezzel: aiseoklub.hu
+                        Nincs kéznél? Próbáld ki ezzel: audit.aiseoklub.hu
                       </button>
                     )}
                   </label>
