@@ -26,7 +26,7 @@ const CONFIG = {
   // A kategóriák elkülönítése szándékos: a NAIH álláspontja szerint a
   // hozzájárulást célonként, külön-külön kell beszerezni, nem lehet egyetlen
   // gombbal mindenre.
-  GOOGLE_ANALYTICS_ID: "", // "statisztika" kategória, pl. "G-XXXXXXXXXX"
+  GOOGLE_ANALYTICS_ID: "G-GMCNJNTX7Y", // "statisztika" kategória (GA4). Csak a süti-hozzájárulás után töltődik be.
   GOOGLE_PIXEL_ID: "",     // "marketing" kategória (Google Ads), pl. "AW-XXXXXXXXX"
   META_PIXEL_ID: "",       // "marketing" kategória, pl. "1234567890123456"
 
