@@ -822,12 +822,12 @@ const AUDIT_FEATURES = [
   {
     icon: IconGlobe,
     title: "Indexelhetőség és nyelv",
-    desc: "Canonical, sitemap és a használt nyelv jelölése, ami nélkül az AI keresők sokszor észre sem veszik az oldaladat.",
+    desc: "Canonical, sitemap és a nyelv jelölése, ami nélkül az AI keresők sokszor észre sem veszik az oldaladat.",
   },
   {
     icon: IconBot,
     title: "AI crawlerek botonként",
-    desc: "Megmutatja, hogy a GPTBot, a ClaudeBot, a PerplexityBot vagy a Google-Extended engedélyezve van-e.",
+    desc: "Megmutatja, hogy a GPTBot, a ClaudeBot vagy a Google-Extended engedélyezve van-e.",
   },
   {
     icon: IconTag,
@@ -842,7 +842,7 @@ const AUDIT_FEATURES = [
   {
     icon: IconBook,
     title: "llms.txt",
-    desc: "Egy egyszerű fájl, amivel közvetlenül az AI-oknak mondod meg, mit olvashatnak nálad. Alig használja valaki.",
+    desc: "Egy egyszerű fájl, amivel az AI-oknak mondod meg, mit olvashatnak nálad. Alig használja valaki.",
   },
   {
     icon: IconShield,
