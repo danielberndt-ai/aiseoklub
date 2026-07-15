@@ -16,6 +16,7 @@ const T = {
   text: "#F6F6F5",
   sub: "rgba(246,246,245,0.72)",
   faint: "rgba(246,246,245,0.4)",
+  footerText: "rgba(246,246,245,0.72)",
 };
 
 const FONT_DISPLAY = "'Inter Tight', system-ui, -apple-system, sans-serif";
@@ -409,10 +410,10 @@ export default function PrivacyPolicy() {
           flexShrink: 0,
         }}
       >
-        <div style={{ maxWidth: 760, margin: "0 auto", fontSize: 12, color: T.faint, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+        <div style={{ maxWidth: 760, margin: "0 auto", fontSize: 12, color: T.footerText, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
           <span>
-            <a href="https://aiseoklub.hu" style={{ color: T.faint, textDecoration: "none" }}>AI SEO Klub</a> ·{" "}
-            <a href="https://danielberndt.com/" target="_blank" rel="noopener noreferrer" style={{ color: T.faint, textDecoration: "none" }}>Daniel Berndt</a>
+            <a href="https://aiseoklub.hu" style={{ color: T.footerText, textDecoration: "none" }}>AI SEO Klub</a> ·{" "}
+            <a href="https://danielberndt.com/" target="_blank" rel="noopener noreferrer" style={{ color: T.footerText, textDecoration: "none" }}>Daniel Berndt</a>
           </span>
         </div>
       </footer>

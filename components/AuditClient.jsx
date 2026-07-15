@@ -54,6 +54,9 @@ const T = {
   text: "#F6F6F5",
   sub: "rgba(246,246,245,0.62)",
   faint: "rgba(246,246,245,0.36)",
+  // A footer szövegeihez – fényesebb, hogy megfeleljen a kontraszt-elvárásnak
+  // (a sötét háttéren kb. 7:1), de nem narancs.
+  footerText: "rgba(246,246,245,0.72)",
 };
 
 const FONT_DISPLAY = "'Inter Tight', system-ui, -apple-system, sans-serif";
@@ -1609,13 +1612,13 @@ export default function AiVisibilityAudit() {
           flexShrink: 0,
         }}
       >
-        <div style={{ maxWidth: 960, margin: "0 auto", fontSize: 12, color: T.faint, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+        <div style={{ maxWidth: 960, margin: "0 auto", fontSize: 12, color: T.footerText, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
           <span>
-            <a href="https://aiseoklub.hu" style={{ color: T.faint, textDecoration: "none" }}>
+            <a href="https://aiseoklub.hu" style={{ color: T.footerText, textDecoration: "none" }}>
               AI SEO Klub
             </a>{" "}
             ·{" "}
-            <a href="https://danielberndt.com/" target="_blank" rel="noopener noreferrer" style={{ color: T.faint, textDecoration: "none" }}>
+            <a href="https://danielberndt.com/" target="_blank" rel="noopener noreferrer" style={{ color: T.footerText, textDecoration: "none" }}>
               Daniel Berndt
             </a>
           </span>
@@ -1626,7 +1629,7 @@ export default function AiVisibilityAudit() {
                 background: "none",
                 border: "none",
                 padding: 0,
-                color: T.faint,
+                color: T.footerText,
                 fontSize: 12,
                 fontFamily: FONT_BODY,
                 cursor: "pointer",
@@ -1635,7 +1638,7 @@ export default function AiVisibilityAudit() {
             >
               Süti beállítások
             </button>
-            <a href={CONFIG.PRIVACY_POLICY_URL} style={{ color: T.faint, textDecoration: "none" }}>
+            <a href={CONFIG.PRIVACY_POLICY_URL} style={{ color: T.footerText, textDecoration: "none" }}>
               Adatvédelmi Tájékoztató
             </a>
           </div>
