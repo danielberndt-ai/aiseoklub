@@ -811,7 +811,7 @@ const AUDIT_FEATURES = [
   {
     icon: IconCode,
     title: "Strukturált adat",
-    desc: "Schema.org jelölés, címsor-hierarchia és GYIK blokkok, amik segítenek az AI-nak pontosan értelmezni a tartalmadat.",
+    desc: "Schema.org jelölés, címsor-hierarchia és GYIK blokkok, amik segítenek az AI-nak értelmezni a tartalmadat.",
   },
   {
     icon: IconGlobe,
@@ -821,7 +821,7 @@ const AUDIT_FEATURES = [
   {
     icon: IconBot,
     title: "AI crawlerek botonként",
-    desc: "Botonként megmutatja, hogy a GPTBot, a ClaudeBot, a PerplexityBot vagy a Google-Extended engedélyezve van-e.",
+    desc: "Megmutatja, hogy a GPTBot, a ClaudeBot, a PerplexityBot vagy a Google-Extended engedélyezve van-e.",
   },
   {
     icon: IconTag,
@@ -831,7 +831,7 @@ const AUDIT_FEATURES = [
   {
     icon: IconLayout,
     title: "Tartalmi szerkezet",
-    desc: "H1 főcím, tiszta címsor-hierarchia, listák és táblázatok. A jól tagolt tartalmat az AI könnyebben bontja idézhető részekre.",
+    desc: "H1 főcím, tiszta címsor-hierarchia, listák és táblázatok. A jól tagolt tartalmat az AI könnyebben idézi.",
   },
   {
     icon: IconBook,
