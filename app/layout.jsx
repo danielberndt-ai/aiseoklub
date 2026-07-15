@@ -54,7 +54,7 @@ export const metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Ha az AI nem lát téged, a vevőid sem fognak. – AI-láthatósági audit",
+        alt: "Ha az AI nem lát téged, a vevőid sem fognak. AI-láthatósági audit.",
       },
     ],
   },

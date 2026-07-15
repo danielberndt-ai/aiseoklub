@@ -128,7 +128,7 @@ function buildEmailHtml({ url, score, details }) {
     : `
       <tr>
         <td style="padding:26px 0 0;font:400 14px/1.6 Arial,Helvetica,sans-serif;color:#0F9D6E;">
-          Nem találtunk hiányzó tételt – ez erős eredmény.
+          Nem találtunk hiányzó tételt, ez erős eredmény.
         </td>
       </tr>`;
 
