@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 
 // =====================================================================
 // AI SEO KLUB – AI-láthatósági audit
-// Vercel-kész React alkalmazás. Sötét minimál dizájn, narancs #FF8C00.
+// Vercel-kész React alkalmazás. Sötét minimál dizájn, narancs #BD5A00.
 // ---------------------------------------------------------------------
 // A szkennelést a saját /api/scan Vercel függvény végzi, determinisztikus
 // ellenőrzésekkel (robots.txt, llms.txt, agents.json, schema, meta,
@@ -39,9 +39,9 @@ const T = {
   glass: "rgba(255,255,255,0.04)",
   glassStrong: "rgba(255,255,255,0.055)",
   line: "rgba(255,255,255,0.08)",
-  orange: "#FF8C00",
-  orangeSoft: "rgba(255,140,0,0.12)",
-  orangeLine: "rgba(255,140,0,0.32)",
+  orange: "#BD5A00",
+  orangeSoft: "rgba(189,90,0,0.12)",
+  orangeLine: "rgba(189,90,0,0.32)",
   green: "#46D19E",
   greenSoft: "rgba(70,209,158,0.12)",
   red: "#FF6B6B",
@@ -1290,7 +1290,7 @@ export default function AiVisibilityAudit() {
     >
 
       {/* Minimál, statikus háttérfény, semmi rács vagy minta */}
-      <div className="glow-bg" style={{ width: 620, height: 620, top: -260, right: -160, background: "rgba(255,140,0,0.09)" }} />
+      <div className="glow-bg" style={{ width: 620, height: 620, top: -260, right: -160, background: "rgba(189,90,0,0.09)" }} />
       <div className="glow-bg" style={{ width: 560, height: 560, bottom: -300, left: -200, background: "rgba(20,184,166,0.10)" }} />
 
       {/* Fejléc */}
@@ -1336,7 +1336,7 @@ export default function AiVisibilityAudit() {
               }}
             >
               Ha az{" "}
-              <span style={{ color: T.orange, textShadow: "0 0 34px rgba(255,140,0,0.45)" }}>
+              <span style={{ color: T.orange, textShadow: "0 0 34px rgba(189,90,0,0.45)" }}>
                 AI nem lát téged
               </span>
               ,
@@ -1367,7 +1367,7 @@ export default function AiVisibilityAudit() {
                     fontWeight: FONT_DISPLAY_WEIGHT,
                     fontSize: 17,
                     cursor: "pointer",
-                    boxShadow: "0 0 34px rgba(255,140,0,0.4)",
+                    boxShadow: "0 0 34px rgba(189,90,0,0.4)",
                     zIndex: 2,
                   }}
                 >
@@ -1425,7 +1425,7 @@ export default function AiVisibilityAudit() {
                     // a limit elérése után is indíthatnak auditot. A tényleges
                     // korlátot a szerver érvényesíti, és 429-cel jelez vissza.
                     style={{
-                      background: remaining <= 0 ? "rgba(255,140,0,0.35)" : T.orange,
+                      background: remaining <= 0 ? "rgba(189,90,0,0.35)" : T.orange,
                       color: remaining <= 0 ? "rgba(255,255,255,0.45)" : "#FFFFFF",
                       border: "none",
                       borderRadius: 13,
@@ -1434,7 +1434,7 @@ export default function AiVisibilityAudit() {
                       fontWeight: FONT_DISPLAY_WEIGHT,
                       fontSize: 16,
                       cursor: "pointer",
-                      boxShadow: remaining <= 0 ? "none" : "0 0 28px rgba(255,140,0,0.35)",
+                      boxShadow: remaining <= 0 ? "none" : "0 0 28px rgba(189,90,0,0.35)",
                     }}
                   >
                     Indítsd el az auditot

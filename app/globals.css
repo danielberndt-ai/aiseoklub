@@ -75,7 +75,7 @@ body {
 
 input::placeholder { color: rgba(246, 246, 245, 0.28); }
 input:focus,
-button:focus-visible { outline: 2px solid #ff8c00; outline-offset: 2px; }
+button:focus-visible { outline: 2px solid #bd5a00; outline-offset: 2px; }
 
 /* ---------- Háttér-fényfoltok ---------- */
 .glow-bg {
@@ -115,8 +115,8 @@ button:focus-visible { outline: 2px solid #ff8c00; outline-offset: 2px; }
   font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
   font-size: 11px;
   letter-spacing: 1px;
-  color: #ff8c00;
-  background: rgba(255, 140, 0, 0.06);
+  color: #bd5a00;
+  background: rgba(189,90,0, 0.06);
 }
 .pp-table td { color: rgba(246, 246, 245, 0.72); }
 
