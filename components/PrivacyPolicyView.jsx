@@ -10,9 +10,9 @@ const T = {
   bg: "#042f2e",
   glass: "rgba(255,255,255,0.04)",
   line: "rgba(255,255,255,0.08)",
-  orange: "#FF6719",
-  orangeSoft: "rgba(255,103,25,0.12)",
-  orangeLine: "rgba(255,103,25,0.32)",
+  orange: "#FF8C00",
+  orangeSoft: "rgba(255,140,0,0.12)",
+  orangeLine: "rgba(255,140,0,0.32)",
   text: "#F6F6F5",
   sub: "rgba(246,246,245,0.72)",
   faint: "rgba(246,246,245,0.4)",
@@ -98,7 +98,7 @@ export default function PrivacyPolicy() {
       }}
     >
 
-      <div className="glow-bg" style={{ width: 620, height: 620, top: -260, right: -160, background: "rgba(255,103,25,0.09)" }} />
+      <div className="glow-bg" style={{ width: 620, height: 620, top: -260, right: -160, background: "rgba(255,140,0,0.09)" }} />
       <div className="glow-bg" style={{ width: 560, height: 560, bottom: -300, left: -200, background: "rgba(20,184,166,0.10)" }} />
 
       {/* Fejléc */}
