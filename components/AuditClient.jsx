@@ -1585,7 +1585,7 @@ export default function AiVisibilityAudit() {
                         találod.
                       </>
                     ) : (
-                      <>Minden vizsgált terület rendben — nincs javítanivaló. A részletes bontást lent találod.</>
+                      <>Minden vizsgált terület rendben, nincs javítanivaló. A részletes bontást lent találod.</>
                     )}
                   </p>
                 </div>
