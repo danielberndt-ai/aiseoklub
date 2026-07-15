@@ -291,6 +291,10 @@ export async function GET(request) {
     return Response.json({ error: "missing_url" }, { status: 400 });
   }
 
+  // SZÁNDÉKOS DÖNTÉS: az audit mindig a megadott domain FŐOLDALÁT vizsgálja
+  // (origin), nem a konkrét aloldalt. Az aloldal-szkennelés növelné az eszköz
+  // használhatóságát, de nem hozna több feliratkozót – ez pedig nem cél.
+  // Ne "javítsd ki" teljes URL-re a jövőben. (Egyeztetve: 2026-07-15)
   let origin;
   try {
     origin = new URL(targetUrl).origin;
