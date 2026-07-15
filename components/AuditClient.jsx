@@ -546,7 +546,11 @@ function ScoreBlock({ value, size = 148, run = true }) {
   const num = useCountUp(value, run);
   const col = scoreColor(value);
   return (
-    <div style={{ position: "relative", width: size, height: size, flexShrink: 0 }}>
+    <div
+      role="img"
+      aria-label={value === null ? "Nincs pontszám" : `AI-láthatósági pontszám: ${value} a 100-ból`}
+      style={{ position: "relative", width: size, height: size, flexShrink: 0 }}
+    >
       <ScoreRing value={value} size={size} stroke={11} />
       <div
         style={{
@@ -1127,6 +1131,7 @@ export default function AiVisibilityAudit() {
   const [stepIdx, setStepIdx] = useState(0);
   const [leadInfo, setLeadInfo] = useState(null);
   const [auditsUsed, setAuditsUsed] = useState(0);
+  const [shareCopied, setShareCopied] = useState(false);
   const [showCookieBanner, setShowCookieBanner] = useState(false);
   // A kulcsot csak a kliensen olvassuk ki (a szerveren nincs window/localStorage).
   const [bypassKey, setBypassKey] = useState("");
@@ -1384,7 +1389,14 @@ export default function AiVisibilityAudit() {
 
             {formMode && (
               <div className="fade-up" style={{ ...glassCard, padding: "26px 26px", marginTop: 26, width: "100%", maxWidth: 520, textAlign: "left" }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                {/* <form>: így az Enter is elindítja az auditot (nem csak a gomb). */}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleStart();
+                  }}
+                  style={{ display: "flex", flexDirection: "column", gap: 14 }}
+                >
                   <label style={{ display: "flex", flexDirection: "column", gap: 7 }}>
                     <span style={{ fontFamily: FONT_MONO, fontSize: 11, letterSpacing: 1.5, color: T.faint }}>WEBOLDAL CÍME</span>
                     <input
@@ -1392,8 +1404,22 @@ export default function AiVisibilityAudit() {
                       value={url}
                       onChange={(e) => setUrl(e.target.value)}
                       placeholder="pl. sajatoldalam.hu"
+                      autoFocus
+                      inputMode="url"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      spellCheck={false}
                       style={{ ...inputStyle, fontFamily: FONT_MONO }}
                     />
+                    {!url && (
+                      <button
+                        type="button"
+                        onClick={() => setUrl("aiseoklub.hu")}
+                        style={{ alignSelf: "flex-start", background: "none", border: "none", padding: "2px 0", color: T.faint, fontSize: 11.5, fontFamily: FONT_BODY, cursor: "pointer" }}
+                      >
+                        Nincs kéznél? Próbáld ki ezzel: aiseoklub.hu
+                      </button>
+                    )}
                   </label>
                   <label style={{ display: "flex", flexDirection: "column", gap: 7 }}>
                     <span style={{ fontFamily: FONT_MONO, fontSize: 11, letterSpacing: 1.5, color: T.faint }}>EMAIL CÍM A RIPORTHOZ</span>
@@ -1426,7 +1452,7 @@ export default function AiVisibilityAudit() {
 
                   <button
                     className="cta"
-                    onClick={handleStart}
+                    type="submit"
                     // Szándékosan NINCS disabled: a korlátlan hozzáférésű címek
                     // a limit elérése után is indíthatnak auditot. A tényleges
                     // korlátot a szerver érvényesíti, és 429-cel jelez vissza.
@@ -1450,7 +1476,7 @@ export default function AiVisibilityAudit() {
                       ? `Még ${remaining} ingyenes auditod van ma.`
                       : `Ma elérted a napi ${CONFIG.DAILY_LIMIT} auditot. Holnap újra próbálhatod.`}
                   </p>
-                </div>
+                </form>
               </div>
             )}
           </section>
@@ -1570,10 +1596,21 @@ export default function AiVisibilityAudit() {
               className="fade-up"
               style={{ background: T.orangeSoft, border: `1px solid ${T.orangeLine}`, borderRadius: 14, padding: "15px 19px", margin: "16px 0 18px", fontSize: 13.5, color: T.text, lineHeight: 1.55, animationDelay: "40ms" }}
             >
-              A teljes riportot a(z) <strong style={{ fontFamily: FONT_MONO, color: T.orange }}>{email.trim()}</strong> címre küldtem.
-              {leadInfo?.simulated && (
+              {leadInfo?.emailSent ? (
+                <>
+                  A teljes riportot a(z) <strong style={{ fontFamily: FONT_MONO, color: T.orange }}>{email.trim()}</strong> címre küldtem.
+                  {" "}Ha pár percen belül nem érkezik meg, nézd meg a spam mappát is.
+                </>
+              ) : (
+                <>
+                  A riportot hamarosan küldjük a(z) <strong style={{ fontFamily: FONT_MONO, color: T.orange }}>{email.trim()}</strong> címre.
+                  {" "}Ha nem érkezne meg, írj a{" "}
+                  <a href="mailto:danielberndt@aiseoklub.hu" style={{ color: T.orange, textDecoration: "none" }}>danielberndt@aiseoklub.hu</a> címre.
+                </>
+              )}
+              {leadInfo?.simulated && !leadInfo?.emailSent && (
                 <span style={{ display: "block", fontSize: 12, color: T.sub, marginTop: 4 }}>
-                  A MailerLite-küldés jelenleg nincs konfigurálva a szerveren, ezért ez a lépés csak szimulálva történt meg.
+                  (Az email-küldés jelenleg nincs konfigurálva a szerveren, ezért ez a lépés csak szimulálva történt meg.)
                 </span>
               )}
             </div>
@@ -1592,13 +1629,31 @@ export default function AiVisibilityAudit() {
                 Az eredmények tájékoztató jellegűek, az AI keresők működése és a szabványok folyamatosan változnak. Az elemzés a
                 nyilvánosan elérhető jelekből dolgozik.
               </p>
-              <button
-                className="ghost"
-                onClick={resetToForm}
-                style={{ background: "transparent", color: T.text, border: `1px solid ${T.line}`, borderRadius: 13, padding: "11px 18px", fontFamily: FONT_DISPLAY, fontWeight: FONT_DISPLAY_WEIGHT, fontSize: 14, cursor: "pointer" }}
-              >
-                Új audit indítása
-              </button>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                <button
+                  className="ghost"
+                  onClick={async () => {
+                    const text = `Az oldalam ${total}/100 pontot ért el az AI-láthatósági auditon. Teszteld a tiéd: https://audit.aiseoklub.hu`;
+                    try {
+                      await navigator.clipboard.writeText(text);
+                      setShareCopied(true);
+                      setTimeout(() => setShareCopied(false), 2200);
+                    } catch {
+                      // Ha a vágólap nem elérhető (pl. régi böngésző), csendben kihagyjuk.
+                    }
+                  }}
+                  style={{ background: "transparent", color: T.text, border: `1px solid ${T.line}`, borderRadius: 13, padding: "11px 18px", fontFamily: FONT_DISPLAY, fontWeight: FONT_DISPLAY_WEIGHT, fontSize: 14, cursor: "pointer" }}
+                >
+                  {shareCopied ? "Kimásolva ✓" : "Eredmény megosztása"}
+                </button>
+                <button
+                  className="ghost"
+                  onClick={resetToForm}
+                  style={{ background: "transparent", color: T.text, border: `1px solid ${T.line}`, borderRadius: 13, padding: "11px 18px", fontFamily: FONT_DISPLAY, fontWeight: FONT_DISPLAY_WEIGHT, fontSize: 14, cursor: "pointer" }}
+                >
+                  Új audit indítása
+                </button>
+              </div>
             </div>
           </>
         )}
