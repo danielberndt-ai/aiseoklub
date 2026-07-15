@@ -1,4 +1,21 @@
 import "./globals.css";
+import { Inter_Tight, IBM_Plex_Mono } from "next/font/google";
+
+// A fontokat a next/font tölti be: build időben self-hostolva, előtöltve.
+// Így nincs renderelést blokkoló külső kérés a Google Fonts felé, és nincs
+// elrendezés-ugrálás (a fallback méretezés is automatikus).
+const interTight = Inter_Tight({
+  subsets: ["latin", "latin-ext"],
+  weight: ["900"],
+  display: "swap",
+  variable: "--font-display",
+});
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "600"],
+  display: "swap",
+  variable: "--font-mono",
+});
 
 const SITE_URL = "https://audit.aiseoklub.hu";
 
@@ -66,7 +83,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="hu">
+    <html lang="hu" className={`${interTight.variable} ${ibmPlexMono.variable}`}>
       <body>{children}</body>
     </html>
   );

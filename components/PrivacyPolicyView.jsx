@@ -19,10 +19,10 @@ const T = {
   footerText: "rgba(246,246,245,0.72)",
 };
 
-const FONT_DISPLAY = "'Inter Tight', system-ui, -apple-system, sans-serif";
+const FONT_DISPLAY = "var(--font-display), 'Inter Tight', system-ui, -apple-system, sans-serif";
 const FONT_DISPLAY_WEIGHT = 900;
-const FONT_BODY = "'Google Sans Flex', system-ui, -apple-system, 'Segoe UI', sans-serif";
-const FONT_MONO = "'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace";
+const FONT_BODY = "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
+const FONT_MONO = "var(--font-mono), 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace";
 
 const glassCard = {
   background: T.glass,

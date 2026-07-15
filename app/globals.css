@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&family=Google+Sans+Flex&family=IBM+Plex+Mono:wght@400;600&display=swap');
+/* A fontokat a next/font tölti be (lásd app/layout.jsx) – self-hostolva,
+   előtöltve, renderelést blokkoló @import nélkül. */
 
 * {
   box-sizing: border-box;
