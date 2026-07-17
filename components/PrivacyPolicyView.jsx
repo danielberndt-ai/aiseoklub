@@ -99,7 +99,7 @@ export default function PrivacyPolicy() {
       }}
     >
 
-      <div className="glow-bg" style={{ width: 620, height: 620, top: -260, right: -160, background: "rgba(255,140,0,0.09)" }} />
+      <div className="glow-bg" style={{ width: 620, height: 620, top: -260, right: -160, background: "rgba(20,184,166,0.09)" }} />
       <div className="glow-bg" style={{ width: 560, height: 560, bottom: -300, left: -200, background: "rgba(20,184,166,0.10)" }} />
 
       {/* Fejléc */}
