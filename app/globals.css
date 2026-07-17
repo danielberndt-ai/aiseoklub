@@ -5,6 +5,18 @@
   box-sizing: border-box;
 }
 
+/* Vízszintes oldalpadding. Azért CSS-változó, mert a fő konténerek inline
+   stílust használnak – azt egy sima media query nem tudná felülírni, a
+   var() értékét viszont igen. Mobilon több levegő kell a széleken. */
+:root {
+  --pad-x: 24px;
+}
+@media (max-width: 768px) {
+  :root {
+    --pad-x: 28px;
+  }
+}
+
 html,
 body {
   margin: 0;

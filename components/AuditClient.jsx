@@ -1305,7 +1305,7 @@ export default function AiVisibilityAudit() {
       <div className="glow-bg" style={{ width: 560, height: 560, bottom: -300, left: -200, background: "rgba(20,184,166,0.10)" }} />
 
       {/* Fejléc */}
-      <header style={{ padding: "16px 24px", position: "relative", zIndex: 1, flexShrink: 0 }}>
+      <header style={{ padding: "16px var(--pad-x)", position: "relative", zIndex: 1, flexShrink: 0 }}>
         <div style={{ maxWidth: 960, margin: "0 auto", display: "flex", alignItems: "baseline", gap: 14 }}>
           <a
             href="https://audit.aiseoklub.hu"
@@ -1317,7 +1317,7 @@ export default function AiVisibilityAudit() {
         </div>
       </header>
 
-      <main style={{ maxWidth: 960, width: "100%", margin: "0 auto", padding: "0 20px 64px", position: "relative", zIndex: 1, flex: 1 }}>
+      <main style={{ maxWidth: 960, width: "100%", margin: "0 auto", padding: "0 var(--pad-x) 64px", position: "relative", zIndex: 1, flex: 1 }}>
         {/* ============ HERO + ŰRLAP (közös intro) ============ */}
         {(heroMode || formMode) && (
           <section
@@ -1661,7 +1661,7 @@ export default function AiVisibilityAudit() {
 
       <footer
         style={{
-          padding: "18px 24px",
+          padding: "18px var(--pad-x)",
           // viewport-fit=cover mellett a tartalom a képernyő aljáig ér, ezért a
           // láblécnek ki kell kerülnie a home indicator sávját.
           paddingBottom: "calc(18px + env(safe-area-inset-bottom))",

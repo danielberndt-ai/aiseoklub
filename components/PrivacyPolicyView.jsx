@@ -103,7 +103,7 @@ export default function PrivacyPolicy() {
       <div className="glow-bg" style={{ width: 560, height: 560, bottom: -300, left: -200, background: "rgba(20,184,166,0.10)" }} />
 
       {/* Fejléc */}
-      <header style={{ padding: "16px 24px", position: "relative", zIndex: 1, flexShrink: 0 }}>
+      <header style={{ padding: "16px var(--pad-x)", position: "relative", zIndex: 1, flexShrink: 0 }}>
         <div style={{ maxWidth: 960, margin: "0 auto", display: "flex", alignItems: "baseline", gap: 14 }}>
           <a href="/" style={{ fontFamily: FONT_DISPLAY, fontWeight: FONT_DISPLAY_WEIGHT, fontSize: 17, textDecoration: "none" }}>
             <span style={{ color: T.orange }}>AI SEO</span> <span style={{ color: T.text }}>KLUB</span>
@@ -112,7 +112,7 @@ export default function PrivacyPolicy() {
         </div>
       </header>
 
-      <main style={{ maxWidth: 760, width: "100%", margin: "0 auto", padding: "16px 20px 64px", position: "relative", zIndex: 1, flex: 1 }}>
+      <main style={{ maxWidth: 760, width: "100%", margin: "0 auto", padding: "16px var(--pad-x) 64px", position: "relative", zIndex: 1, flex: 1 }}>
         <a
           href="/"
           style={{
@@ -403,7 +403,7 @@ export default function PrivacyPolicy() {
 
       <footer
         style={{
-          padding: "18px 24px",
+          padding: "18px var(--pad-x)",
           paddingBottom: "calc(18px + env(safe-area-inset-bottom))",
           position: "relative",
           zIndex: 1,
