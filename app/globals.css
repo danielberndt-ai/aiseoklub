@@ -46,7 +46,7 @@ body {
    így a blokk eltűnik. Ezért itt a színátmenetet ÉS a fényfoltokat is kikapcsoljuk. */
 @media (max-width: 768px) {
   body {
-    background-color: #042f2e;
+    background-color: #032625;
     background-image: none;
   }
   .glow-bg {
