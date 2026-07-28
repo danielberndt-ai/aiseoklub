@@ -96,12 +96,12 @@ const SCAN_STEPS = [
 // A szkennelő animáció mindig végigfut, hogy alapos átvizsgálás benyomását
 // keltse. A tényleges API-válasz gyakran ennél gyorsabb; ilyenkor megvárjuk a
 // hátralévő időt, mielőtt megjelenítjük az eredményt.
-const MIN_SCAN_MS = 5000;
-// Egy rövid, általános betöltés fut le, MIELŐTT az ellenőrző lista megjelenik.
-// Ez alatt jön vissza egy nem létező domain hibája is, így a lista fals
-// "kipipálása" ilyenkor meg sem jelenik.
-const LOAD_DELAY_MS = 1500;
-const SCAN_STEP_MS = Math.floor((MIN_SCAN_MS - LOAD_DELAY_MS) / SCAN_STEPS.length);
+// A folyamat két fázisú:
+// 1) "Kapcsolódás a weboldalhoz…" – amíg a szerver válaszára várunk. Csak ekkor
+//    derül ki, hogy a domain él-e. Ha nem, itt jön a hiba, lista nélkül.
+// 2) Ellenőrző lista – KIZÁRÓLAG élő domain esetén indul, és végigfut.
+const CONNECT_MIN_MS = 900; // hogy a "Kapcsolódás…" ne csak felvillanjon
+const SCAN_STEP_MS = 520; // egy-egy lépés ideje az ellenőrző listában
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -1191,26 +1191,28 @@ export default function AiVisibilityAudit() {
       .slice(0, 2);
   }, [categories]);
 
-  useEffect(() => {
-    if (phase !== "scan") {
-      setChecklistVisible(false);
-      return;
-    }
-    // Először egy rövid, általános betöltés (LOAD_DELAY_MS), és csak utána indul
-    // az ellenőrző lista, lépésenként.
-    setStepIdx(0);
-    setChecklistVisible(false);
-    let interval;
-    const delay = setTimeout(() => {
+  // Az ellenőrző lista animációját NEM időzítő indítja, hanem a handleStart:
+  // csak akkor, ha a szerver már visszaigazolta, hogy a domain él. Ez a promise
+  // végigviszi a lépéseket, és a végén feloldódik.
+  function runChecklist() {
+    return new Promise((resolve) => {
       setChecklistVisible(true);
-      interval = setInterval(() => {
-        setStepIdx((i) => (i < SCAN_STEPS.length - 1 ? i + 1 : i));
+      setStepIdx(0);
+      let i = 0;
+      const t = setInterval(() => {
+        i += 1;
+        if (i >= SCAN_STEPS.length) {
+          clearInterval(t);
+          setTimeout(resolve, 320); // rövid szünet az utolsó lépés után
+        } else {
+          setStepIdx(i);
+        }
       }, SCAN_STEP_MS);
-    }, LOAD_DELAY_MS);
-    return () => {
-      clearTimeout(delay);
-      if (interval) clearInterval(interval);
-    };
+    });
+  }
+
+  useEffect(() => {
+    if (phase !== "scan") setChecklistVisible(false);
   }, [phase]);
 
   async function handleStart() {
@@ -1232,18 +1234,21 @@ export default function AiVisibilityAudit() {
     setFormError("");
     setScanError("");
     setScannedUrl(normalized);
+    setChecklistVisible(false); // előbb "Kapcsolódás…", lista csak élő domainnél
     setPhase("scan");
     const scanStartedAt = Date.now();
 
     try {
       // A limitről a szerver dönt: a korlátlan címeket ő ismeri fel. Ezért itt
       // nem blokkolunk előre, és a helyi számlálót is csak utólag növeljük.
+      // Ha a domain nem él, ez SITE_UNREACHABLE hibát dob -> a lista el sem indul.
       const data = await runRemoteScan(normalized, bypassKey);
 
-      // Az animáció mindig fusson végig (min. 5 mp), akkor is, ha az API
-      // gyorsabban válaszol – így az átvizsgálás alaposnak hat.
+      // Idáig eljutottunk: a domain ÉL. A "Kapcsolódás…" legalább egy pillanatig
+      // látsszon, majd végigfut az ellenőrző lista (zöld pipákkal).
       const elapsed = Date.now() - scanStartedAt;
-      if (elapsed < MIN_SCAN_MS) await wait(MIN_SCAN_MS - elapsed);
+      if (elapsed < CONNECT_MIN_MS) await wait(CONNECT_MIN_MS - elapsed);
+      await runChecklist();
 
       setResult(data);
       setPhase("done");
@@ -1542,14 +1547,10 @@ export default function AiVisibilityAudit() {
                           fontSize: 12,
                           width: 16,
                           textAlign: "center",
-                          // A kész lépések SZÁNDÉKOSAN nem zöld "siker" pipát kapnak:
-                          // ezek folyamat-lépések (pl. "robots.txt letöltése"), nem
-                          // eredmények. A zöld pipa azt a hamis benyomást keltené,
-                          // hogy megtalálta a fájlt – akkor is, ha az oldal el sem érhető.
-                          color: state === "done" ? "rgba(246,246,245,0.5)" : state === "active" ? T.orange : "rgba(246,246,245,0.22)",
+                          color: state === "done" ? T.green : state === "active" ? T.orange : "rgba(246,246,245,0.22)",
                         }}
                       >
-                        {state === "done" ? "•" : state === "active" ? "▸" : "·"}
+                        {state === "done" ? "✓" : state === "active" ? "▸" : "·"}
                       </span>
                       <span style={{ fontFamily: FONT_MONO, fontSize: 13, color: state === "wait" ? "rgba(246,246,245,0.28)" : T.sub }}>{s}</span>
                     </div>
