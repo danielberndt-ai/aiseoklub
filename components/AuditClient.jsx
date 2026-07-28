@@ -97,7 +97,11 @@ const SCAN_STEPS = [
 // keltse. A tényleges API-válasz gyakran ennél gyorsabb; ilyenkor megvárjuk a
 // hátralévő időt, mielőtt megjelenítjük az eredményt.
 const MIN_SCAN_MS = 5000;
-const SCAN_STEP_MS = Math.floor(MIN_SCAN_MS / SCAN_STEPS.length);
+// Egy rövid, általános betöltés fut le, MIELŐTT az ellenőrző lista megjelenik.
+// Ez alatt jön vissza egy nem létező domain hibája is, így a lista fals
+// "kipipálása" ilyenkor meg sem jelenik.
+const LOAD_DELAY_MS = 1500;
+const SCAN_STEP_MS = Math.floor((MIN_SCAN_MS - LOAD_DELAY_MS) / SCAN_STEPS.length);
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -1136,6 +1140,7 @@ export default function AiVisibilityAudit() {
   const [result, setResult] = useState(null);
   const [scannedUrl, setScannedUrl] = useState("");
   const [stepIdx, setStepIdx] = useState(0);
+  const [checklistVisible, setChecklistVisible] = useState(false);
   const [leadInfo, setLeadInfo] = useState(null);
   const [auditsUsed, setAuditsUsed] = useState(0);
   const [shareCopied, setShareCopied] = useState(false);
@@ -1187,12 +1192,25 @@ export default function AiVisibilityAudit() {
   }, [categories]);
 
   useEffect(() => {
-    if (phase !== "scan") return;
+    if (phase !== "scan") {
+      setChecklistVisible(false);
+      return;
+    }
+    // Először egy rövid, általános betöltés (LOAD_DELAY_MS), és csak utána indul
+    // az ellenőrző lista, lépésenként.
     setStepIdx(0);
-    const t = setInterval(() => {
-      setStepIdx((i) => (i < SCAN_STEPS.length - 1 ? i + 1 : i));
-    }, SCAN_STEP_MS);
-    return () => clearInterval(t);
+    setChecklistVisible(false);
+    let interval;
+    const delay = setTimeout(() => {
+      setChecklistVisible(true);
+      interval = setInterval(() => {
+        setStepIdx((i) => (i < SCAN_STEPS.length - 1 ? i + 1 : i));
+      }, SCAN_STEP_MS);
+    }, LOAD_DELAY_MS);
+    return () => {
+      clearTimeout(delay);
+      if (interval) clearInterval(interval);
+    };
   }, [phase]);
 
   async function handleStart() {
@@ -1508,6 +1526,11 @@ export default function AiVisibilityAudit() {
             <div style={{ flex: "1 1 320px", minWidth: 260 }}>
               <h2 style={{ fontFamily: FONT_DISPLAY, color: T.text, fontSize: 22, margin: "0 0 6px" }}>Audit folyamatban…</h2>
               <p style={{ fontFamily: FONT_MONO, fontSize: 12.5, color: T.orange, margin: "0 0 18px" }}>{prettyUrl(scannedUrl)}</p>
+              {!checklistVisible ? (
+                <p className="soft-pulse" style={{ fontFamily: FONT_MONO, fontSize: 13, color: T.sub, margin: 0 }}>
+                  Kapcsolódás a weboldalhoz…
+                </p>
+              ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
                 {SCAN_STEPS.map((s, i) => {
                   const state = i < stepIdx ? "done" : i === stepIdx ? "active" : "wait";
@@ -1533,6 +1556,7 @@ export default function AiVisibilityAudit() {
                   );
                 })}
               </div>
+              )}
             </div>
           </section>
         )}
