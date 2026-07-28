@@ -1369,7 +1369,7 @@ export default function AiVisibilityAudit() {
                   }}
                   style={{
                     marginTop: 30,
-                    background: T.orange,
+                    background: "linear-gradient(135deg, #FFA733 0%, #FF8C00 45%, #F26D00 100%)",
                     color: T.onOrange,
                     border: "none",
                     borderRadius: 14,
