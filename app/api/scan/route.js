@@ -63,11 +63,17 @@ async function fetchWithTimeout(url, options = {}) {
 async function safeText(url) {
   try {
     const res = await fetchWithTimeout(url);
-    if (!res.ok) return { ok: false, status: res.status, text: null };
+    // A CMS-felismeréshez néhány válaszfejléc is hasznos (szerver, platform-jelzők).
+    const headers = {
+      server: res.headers.get("server") || "",
+      poweredBy: res.headers.get("x-powered-by") || "",
+      generator: res.headers.get("x-generator") || "",
+    };
+    if (!res.ok) return { ok: false, status: res.status, text: null, headers };
     const text = await res.text();
-    return { ok: true, status: res.status, text };
+    return { ok: true, status: res.status, text, headers };
   } catch {
-    return { ok: false, status: null, text: null };
+    return { ok: false, status: null, text: null, headers: {} };
   }
 }
 
@@ -78,6 +84,36 @@ async function safeHead(url) {
   } catch {
     return false;
   }
+}
+
+// ---------------------------------------------------------------------
+// CMS / platform felismerése a HTML és a válaszfejlécek alapján.
+// Csak belső célra (Google Sheet), a felhasználónak nem jelenik meg.
+// ---------------------------------------------------------------------
+function detectCms(html, headers) {
+  const h = (html || "").toLowerCase();
+  const server = (headers?.server || "").toLowerCase();
+  const powered = (headers?.poweredBy || "").toLowerCase();
+  const hay = `${h} ${server} ${powered}`;
+
+  // A sorrend számít: az egyértelmű, egyedi jelzők előrébb.
+  if (server.includes("framer") || hay.includes("framerusercontent") || hay.includes("__framer")) return "Framer";
+  if (hay.includes("wp-content") || hay.includes("wp-json") || hay.includes("wp-includes") || /generator" content="wordpress/.test(h)) return "WordPress";
+  if (hay.includes("cdn.shopify.com") || hay.includes("shopify.theme") || headers?.poweredBy?.toLowerCase().includes("shopify") || hay.includes("x-shopify")) return "Shopify";
+  if (hay.includes("wixstatic.com") || hay.includes("wix.com") || hay.includes("_wixcss") || hay.includes("wix-warmup-data")) return "Wix";
+  if (hay.includes("squarespace.com") || hay.includes("static1.squarespace") || /generator" content="squarespace/.test(h)) return "Squarespace";
+  if (hay.includes("shoprenter") || hay.includes("shprtr")) return "Shoprenter";
+  if (hay.includes("unas.hu") || hay.includes("unasshop") || hay.includes("shptron")) return "Unas";
+  if (hay.includes("webflow")) return "Webflow";
+  if (hay.includes("woocommerce")) return "WordPress (WooCommerce)";
+  if (hay.includes("drupal")) return "Drupal";
+  if (hay.includes("joomla")) return "Joomla";
+
+  // Fallback: a <meta name="generator"> tartalma, ha van.
+  const gen = h.match(/<meta[^>]*name=["']generator["'][^>]*content=["']([^"']+)["']/);
+  if (gen && gen[1]) return gen[1].trim().slice(0, 60);
+
+  return "Egyedi / ismeretlen";
 }
 
 // ---------------------------------------------------------------------
@@ -355,8 +391,12 @@ export async function GET(request) {
     htmlAnalysis = analyzed;
   }
 
+  // CMS csak belső célra (Google Sheet), a felületen nem jelenik meg.
+  const cms = detectCms(homepageRes.text, homepageRes.headers);
+
   const result = {
     unlimited, // a kliens ebből tudja, hogy ne növelje a helyi napi számlálót
+    cms,
     robots: { found: robotsFound, bots },
     llms: { found: llmsRes.ok },
     agents: { found: agentsRes.ok || agentsWellKnownRes.ok },

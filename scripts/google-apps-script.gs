@@ -30,6 +30,7 @@ const HEADERS = [
   "Schema",
   "Meta",
   "Szerkezet",
+  "CMS",
 ];
 
 function doPost(e) {
@@ -61,6 +62,7 @@ function doPost(e) {
       data.schema,
       data.meta,
       data.struct,
+      data.cms || "",
     ]);
 
     return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(

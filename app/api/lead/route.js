@@ -256,7 +256,7 @@ async function sendReportEmail({ email, url, score, details }) {
 // ---------------------------------------------------------------------
 // Feliratkozó mentése Google Sheetbe (Apps Script webhook)
 // ---------------------------------------------------------------------
-async function saveToSheet({ email, url, score, categories }) {
+async function saveToSheet({ email, url, score, categories, cms }) {
   const webhookUrl = process.env.SHEETS_WEBHOOK_URL;
   const secret = process.env.SHEETS_WEBHOOK_SECRET;
   if (!webhookUrl || !secret) return { saved: false, reason: "not_configured" };
@@ -276,6 +276,7 @@ async function saveToSheet({ email, url, score, categories }) {
         schema: categories?.schema ?? "",
         meta: categories?.meta ?? "",
         struct: categories?.struct ?? "",
+        cms: cms || "", // csak a Sheetbe, nem az emailbe
       }),
     });
     if (!res.ok) {
@@ -303,7 +304,7 @@ export async function POST(request) {
     return Response.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const { email, url, score, categories, details } = body || {};
+  const { email, url, score, categories, details, cms } = body || {};
 
   if (!email || typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
     return Response.json({ error: "invalid_email" }, { status: 400 });
@@ -313,7 +314,7 @@ export async function POST(request) {
   // feliratkozó akkor is bekerül a Sheetbe, és fordítva.
   const [mail, sheet] = await Promise.all([
     sendReportEmail({ email, url, score, details }),
-    saveToSheet({ email, url, score, categories }),
+    saveToSheet({ email, url, score, categories, cms }),
   ]);
 
   // A "simulated" jelzést a felület használja: akkor igaz, ha az email

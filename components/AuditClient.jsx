@@ -105,12 +105,12 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 // Lead beküldés – a saját Vercel API route-ot hívja (api/lead.js),
 // ami a szerveren, saját MailerLite API kulccsal küldi tovább az adatot.
 // ------------------------------------------------------------------
-async function submitLead({ email, url, score, categories, details }) {
+async function submitLead({ email, url, score, categories, details, cms }) {
   try {
     const res = await fetch("/api/lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, url, score, categories, details }),
+      body: JSON.stringify({ email, url, score, categories, details, cms }),
     });
     if (!res.ok) throw new Error("lead-failed");
     return await res.json();
@@ -1246,6 +1246,7 @@ export default function AiVisibilityAudit() {
         score: scoreForLead,
         categories: catSummary,
         details,
+        cms: data.cms || "", // csak a Google Sheetbe kerül, a felületen nem jelenik meg
       });
       setLeadInfo(lead);
     } catch (e) {
