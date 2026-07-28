@@ -1519,10 +1519,14 @@ export default function AiVisibilityAudit() {
                           fontSize: 12,
                           width: 16,
                           textAlign: "center",
-                          color: state === "done" ? T.green : state === "active" ? T.orange : "rgba(246,246,245,0.22)",
+                          // A kész lépések SZÁNDÉKOSAN nem zöld "siker" pipát kapnak:
+                          // ezek folyamat-lépések (pl. "robots.txt letöltése"), nem
+                          // eredmények. A zöld pipa azt a hamis benyomást keltené,
+                          // hogy megtalálta a fájlt – akkor is, ha az oldal el sem érhető.
+                          color: state === "done" ? "rgba(246,246,245,0.5)" : state === "active" ? T.orange : "rgba(246,246,245,0.22)",
                         }}
                       >
-                        {state === "done" ? "✓" : state === "active" ? "▸" : "·"}
+                        {state === "done" ? "•" : state === "active" ? "▸" : "·"}
                       </span>
                       <span style={{ fontFamily: FONT_MONO, fontSize: 13, color: state === "wait" ? "rgba(246,246,245,0.28)" : T.sub }}>{s}</span>
                     </div>
