@@ -290,6 +290,27 @@ async function checkAndBumpDailyLimit(ip) {
   return { allowed: current + 1 <= DAILY_LIMIT, remaining: Math.max(0, DAILY_LIMIT - (current + 1)) };
 }
 
+// A limit visszatérítése: ha az audit érdemi ok miatt nem futott le (pl. nem
+// létező domain), ne vegyen el egy auditot a napi keretből.
+async function refundDailyLimit(ip) {
+  const today = new Date().toISOString().slice(0, 10);
+  const key = `aiseoklub:audit:${ip}:${today}`;
+  const upstashUrl = process.env.UPSTASH_REDIS_REST_URL;
+  const upstashToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  try {
+    if (upstashUrl && upstashToken) {
+      await fetch(`${upstashUrl}/decr/${encodeURIComponent(key)}`, {
+        headers: { Authorization: `Bearer ${upstashToken}` },
+      });
+      return;
+    }
+    const current = memoryCounter.get(key) || 0;
+    memoryCounter.set(key, Math.max(0, current - 1));
+  } catch {
+    // A visszatérítés hibája nem kritikus, csendben elnyeljük.
+  }
+}
+
 // ---------------------------------------------------------------------
 // Korlátlan hozzáférés titkos kulccsal. A kulcsot környezeti változóban
 // tartjuk (BYPASS_KEY), sosem a kódban – a repó nyilvános. Aki ismeri a
@@ -340,9 +361,9 @@ export async function GET(request) {
 
   // Érvényes titkos kulcs esetén a számlálót meg sem érintjük.
   const unlimited = isUnlimited(searchParams.get("key"));
+  const clientIp = getClientIp(request);
   if (!unlimited) {
-    const ip = getClientIp(request);
-    const { allowed, remaining } = await checkAndBumpDailyLimit(ip);
+    const { allowed, remaining } = await checkAndBumpDailyLimit(clientIp);
     if (!allowed) {
       return Response.json({ error: "daily_limit_reached", remaining }, { status: 429 });
     }
@@ -355,6 +376,18 @@ export async function GET(request) {
     safeText(`${origin}/.well-known/agents.json`),
     safeText(origin),
   ]);
+
+  // --- Elérhetőség-ellenőrzés ---
+  // Ha sem a főoldal, sem a robots.txt nem tudott CSATLAKOZNI (status === null,
+  // vagyis DNS-hiba / nincs válasz), akkor a domain valószínűleg nem létezik
+  // vagy nem elérhető. Ilyenkor nem adunk félrevezető pontszámot, hanem hibát,
+  // és a napi limitet is visszatérítjük (egy elgépelt cím ne vegyen el auditot).
+  const homepageConnected = homepageRes.status !== null;
+  const robotsConnected = robotsRes.status !== null;
+  if (!homepageConnected && !robotsConnected) {
+    if (!unlimited) await refundDailyLimit(clientIp);
+    return Response.json({ error: "site_unreachable" }, { status: 200 });
+  }
 
   // --- robots.txt + botonkénti státusz ---
   let robotsFound = robotsRes.ok;

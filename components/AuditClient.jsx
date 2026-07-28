@@ -333,7 +333,14 @@ async function runRemoteScan(targetUrl, key) {
     throw err;
   }
   if (!res.ok) throw new Error("scan-failed");
-  return await res.json();
+  const data = await res.json();
+  // A szerver 200-nal, de error mezővel jelzi, ha a domain nem érhető el.
+  if (data.error === "site_unreachable") {
+    const err = new Error("site-unreachable");
+    err.code = "SITE_UNREACHABLE";
+    throw err;
+  }
+  return data;
 }
 
 // ------------------------------------------------------------------
@@ -1254,6 +1261,10 @@ export default function AiVisibilityAudit() {
       if (e.code === "DAILY_LIMIT") {
         setAuditsUsed(CONFIG.DAILY_LIMIT);
         setScanError(`Ma elérted a napi ${CONFIG.DAILY_LIMIT} auditot. Holnap újra próbálhatod.`);
+      } else if (e.code === "SITE_UNREACHABLE") {
+        setScanError(
+          "Ezt a weboldalt nem sikerült elérni. Ellenőrizd, hogy jól írtad-e be a címet, és hogy az oldal valóban létezik és elérhető."
+        );
       } else {
         setScanError(
           "A szkennelés most nem sikerült. Előfordulhat, hogy az oldal nem érhető el, vagy éppen nem válaszol. Próbáld újra."
