@@ -131,10 +131,10 @@ button:focus-visible { outline: 2px solid #ff8c00; outline-offset: 2px; }
   mask-image: linear-gradient(to top, #000 20%, transparent 75%);
   -webkit-mask-image: linear-gradient(to top, #000 20%, transparent 75%);
 }
-/* Mobilon csak a homály marad, elsötétedés nélkül */
+/* Mobilon az alsó homály-sáv teljesen ki van kapcsolva */
 @media (max-width: 768px) {
-  .bottom-blur::after {
-    background: none;
+  .bottom-blur {
+    display: none;
   }
 }
 
