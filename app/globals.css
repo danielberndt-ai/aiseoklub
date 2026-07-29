@@ -131,10 +131,10 @@ button:focus-visible { outline: 2px solid #ff8c00; outline-offset: 2px; }
   mask-image: linear-gradient(to top, #000 20%, transparent 75%);
   -webkit-mask-image: linear-gradient(to top, #000 20%, transparent 75%);
 }
-/* Mobilon a sötétedés a mobil háttérszínhez igazodik */
+/* Mobilon csak a homály marad, elsötétedés nélkül */
 @media (max-width: 768px) {
   .bottom-blur::after {
-    background: linear-gradient(to top, rgba(3, 38, 37, 0.72) 0%, rgba(3, 38, 37, 0) 100%);
+    background: none;
   }
 }
 
