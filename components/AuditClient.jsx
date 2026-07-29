@@ -988,9 +988,32 @@ function CategoryRow({ title, desc, checked, onChange, locked }) {
 // oldal tényleges tartalmát mossa el (nem egy overflow/transform szülő ürességét).
 function BottomBlur() {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const [atBottom, setAtBottom] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    // A homály eltűnik, amint a lap aljához érünk, hogy a footer tisztán
+    // látsszon (a küszöb nagyjából a sáv magassága).
+    const HIDE_THRESHOLD = 160;
+    const onScroll = () => {
+      const scrolledToBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - HIDE_THRESHOLD;
+      setAtBottom(scrolledToBottom);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
   if (!mounted) return null;
-  return createPortal(<div className="bottom-blur" aria-hidden="true" />, document.body);
+  return createPortal(
+    <div className={`bottom-blur${atBottom ? " is-hidden" : ""}`} aria-hidden="true" />,
+    document.body
+  );
 }
 
 function CookieBanner({ onDecide }) {

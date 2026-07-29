@@ -103,6 +103,12 @@ button:focus-visible { outline: 2px solid #ff8c00; outline-offset: 2px; }
   height: 150px;
   pointer-events: none;
   z-index: 30;
+  opacity: 1;
+  transition: opacity 280ms ease;
+}
+/* Az oldal legaljára érve eltűnik, hogy a footer tisztán látsszon. */
+.bottom-blur.is-hidden {
+  opacity: 0;
 }
 .bottom-blur::before,
 .bottom-blur::after {
@@ -119,8 +125,8 @@ button:focus-visible { outline: 2px solid #ff8c00; outline-offset: 2px; }
 }
 /* Erősebb homály + sötétedő átmenet csak a legalján */
 .bottom-blur::after {
-  backdrop-filter: blur(9px);
-  -webkit-backdrop-filter: blur(9px);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
   background: linear-gradient(to top, rgba(2, 16, 15, 0.72) 0%, rgba(2, 16, 15, 0) 100%);
   mask-image: linear-gradient(to top, #000 20%, transparent 75%);
   -webkit-mask-image: linear-gradient(to top, #000 20%, transparent 75%);
