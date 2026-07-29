@@ -19,8 +19,9 @@ export async function GET(request) {
     }
   }
 
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  // Mindkét lehetséges env-elnevezést elfogadjuk (Upstash Redis vagy Upstash KV).
+  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || "";
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || "";
   if (!url || !token) {
     return Response.json({ ok: false, reason: "upstash_not_configured" });
   }

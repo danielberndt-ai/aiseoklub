@@ -261,12 +261,23 @@ function analyzeHtml(html) {
 // ---------------------------------------------------------------------
 const memoryCounter = new Map();
 
+// Az Upstash REST elérése többféle env-névvel jöhet, attól függően, hogy a
+// Vercel Marketplace melyik integrációt hozta létre:
+//  - Upstash Redis:        UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN
+//  - Upstash KV (Vercel):  KV_REST_API_URL / KV_REST_API_TOKEN
+// Mindkettőt elfogadjuk, hogy a rate limit tényleg a megosztott DB-t használja.
+function getRedisConfig() {
+  return {
+    url: process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || "",
+    token: process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || "",
+  };
+}
+
 async function checkAndBumpDailyLimit(ip) {
   const today = new Date().toISOString().slice(0, 10);
   const key = `aiseoklub:audit:${ip}:${today}`;
 
-  const upstashUrl = process.env.UPSTASH_REDIS_REST_URL;
-  const upstashToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const { url: upstashUrl, token: upstashToken } = getRedisConfig();
 
   if (upstashUrl && upstashToken) {
     const res = await fetch(`${upstashUrl}/incr/${encodeURIComponent(key)}`, {
@@ -295,8 +306,7 @@ async function checkAndBumpDailyLimit(ip) {
 async function refundDailyLimit(ip) {
   const today = new Date().toISOString().slice(0, 10);
   const key = `aiseoklub:audit:${ip}:${today}`;
-  const upstashUrl = process.env.UPSTASH_REDIS_REST_URL;
-  const upstashToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const { url: upstashUrl, token: upstashToken } = getRedisConfig();
   try {
     if (upstashUrl && upstashToken) {
       await fetch(`${upstashUrl}/decr/${encodeURIComponent(key)}`, {
