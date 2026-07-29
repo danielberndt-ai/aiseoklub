@@ -90,6 +90,48 @@ input::placeholder { color: rgba(246, 246, 245, 0.28); }
 input:focus,
 button:focus-visible { outline: 2px solid #ff8c00; outline-offset: 2px; }
 
+/* ---------- Alsó, átmenetes homály-sáv ----------
+   A lap aljához rögzített, egyre erősödő homály, ami elmossa alatta a görgődő
+   tartalmat és "levezeti" a tekintetet. A backdrop-filter miatt portállal a
+   <body> alá kerül (különben egy overflow/transform szülő elrontaná).
+   Két réteg a finomabb, valóban progresszív hatásért. */
+.bottom-blur {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 150px;
+  pointer-events: none;
+  z-index: 30;
+}
+.bottom-blur::before,
+.bottom-blur::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+/* Enyhe, magasabbra érő homály */
+.bottom-blur::before {
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  mask-image: linear-gradient(to top, #000 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, #000 55%, transparent 100%);
+}
+/* Erősebb homály + sötétedő átmenet csak a legalján */
+.bottom-blur::after {
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  background: linear-gradient(to top, rgba(2, 16, 15, 0.72) 0%, rgba(2, 16, 15, 0) 100%);
+  mask-image: linear-gradient(to top, #000 20%, transparent 75%);
+  -webkit-mask-image: linear-gradient(to top, #000 20%, transparent 75%);
+}
+/* Mobilon a sötétedés a mobil háttérszínhez igazodik */
+@media (max-width: 768px) {
+  .bottom-blur::after {
+    background: linear-gradient(to top, rgba(3, 38, 37, 0.72) 0%, rgba(3, 38, 37, 0) 100%);
+  }
+}
+
 /* ---------- Footer linkek: nagyobb érinthető felület (min. 44px) ---------- */
 .footer-link {
   display: inline-flex;

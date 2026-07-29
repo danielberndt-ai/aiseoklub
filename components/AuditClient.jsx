@@ -984,6 +984,15 @@ function CategoryRow({ title, desc, checked, onChange, locked }) {
   );
 }
 
+// Alsó homály-sáv. Portállal a <body> alá kerül, hogy a backdrop-filter az
+// oldal tényleges tartalmát mossa el (nem egy overflow/transform szülő ürességét).
+function BottomBlur() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+  return createPortal(<div className="bottom-blur" aria-hidden="true" />, document.body);
+}
+
 function CookieBanner({ onDecide }) {
   const [showSettings, setShowSettings] = useState(false);
   // Az opcionális kategóriák alapból BE vannak kapcsolva (üzemeltetői döntés).
@@ -1744,6 +1753,7 @@ export default function AiVisibilityAudit() {
         </div>
       </footer>
 
+      <BottomBlur />
       {showCookieBanner && <CookieBanner onDecide={handleCookieDecision} />}
     </div>
   );
